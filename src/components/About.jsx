@@ -34,7 +34,7 @@ const About = () => {
 
         <AnimatedTitle
           title="Kazancın Yeni Adresi! SüratBet"
-          containerClass="mt-5 !text-blue-100 text-center"
+          containerClass="mt-5 !text-blue-50 text-center"
         />
 
         

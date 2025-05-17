@@ -13,7 +13,7 @@ const Hero = () => {
   const [isLoading, setisLoading] = useState(true);
   const [loadedVideos, setLoadedVideos] = useState(0);
 
-  const totalVideos = 4;
+  const totalVideos = 2;
   const nextVideoRef = useRef(null);
 
   const handleVideoLoad = () => {
@@ -132,12 +132,11 @@ const Hero = () => {
             onLoadedData={handleVideoLoad}
           />
         </div>
+
         <div className="absolute left-0 top-0 z-40 size-full">
           <div className="mt-24 px-5 sm:px-10">
-            <h1 className="special-font hero-heading text-blue-100">
-              SüratBet
-            </h1>
-            <p className="mb-5 max-w-64 font-robert-regular text-white-50">
+            <img src="/img/SuratLogo.png" alt="logo" className="w-60" />
+            <p className="mb-5 max-w-64 font-robert-regular text-white-50 ">
               Süratbet'te Bonuslar Kademeli, Kazançlar Süratli! %300 hoş geldin
               bonusu, 333 freespin ve %100 risksiz slotla oyuna güçlü bir giriş
               yap! Kayıp mı yaşadın? Sorun değil! Aldığın kayıp bonusunun bile
@@ -148,7 +147,7 @@ const Hero = () => {
             </p>
             <Button
               id="watch-trailer"
-              title="Hemen Oyna"
+              title="Hemen oyna"
               leftIcon={<TiLocationArrow />}
               containerClass="!bg-blue-50 flex-center gap-1"
             />
