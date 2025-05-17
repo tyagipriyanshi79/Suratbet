@@ -50,12 +50,12 @@ const Story = () => {
         <div id="story" className="min-h-dvh w-screen bg-black text-blue-50">
             <div className="flex size-full flex-col items-center py-10 pb-24">
                 <p className="font-general text-sm uppercase md:text-[10px]">
-                    the multiversal ip world
+                    
                 </p>
 
                 <div className="relative size-full">
                     <AnimatedTitle
-                        title="the st<b>o</b>ry of <br /> a hidden real<b>m</b>"
+                        title="H<b>a</b>kkımızd<b>a</b>"
                         containerClass="mt-5 pointer-events-none mix-blend-difference relative z-10"
                     />
 
@@ -104,21 +104,35 @@ const Story = () => {
                     </div>
                 </div>
 
-                <div className="-mt-80 flex w-full justify-center md:-mt-64 md:me-44 md:justify-end">
-                    <div className="flex h-full w-fit flex-col items-center md:items-start">
-                        <p className="mt-3 max-w-sm text-center font-circular-web text-violet-50 md:text-start">
-                            Where realms converge, lies Zentry and the boundless pillar.
-                            Discover its secrets and shape your fate amidst infinite
-                            opportunities.
-                        </p>
+                <div className="-mt-80 flex w-full justify-center md:-mt-64 md:justify-center">
+  <div className="flex w-full max-w-6xl flex-col px-4 md:flex-row md:items-start md:justify-between md:gap-x-16">
+    
+    {/* Left Paragraph - Slightly Down */}
+    <div className="w-full md:w-1/2 mt-10 md:mt-20">
+      <p className="text-left font-circular-web text-violet-50">
+        <strong>Süratbet Hakkında</strong>
+        <br />
+        Süratbet, online bahis ve casino sektöründe kullanıcılarına güvenli, hızlı ve avantajlarla dolu bir oyun deneyimi sunmak amacıyla kurulmuştur. Platformumuz, güçlü ve stabil Betco altyapısıyla çalışmakta olup, yüksek performanslı erişim ve sorunsuz oyun keyfi sağlamaktadır. Tobuque lisansı ile yasal çerçevede hizmet veren Süratbet, oyuncularına adil, şeffaf ve sürdürülebilir bir oyun ortamı sunmayı ilke edinmiştir.
+      </p>
+    </div>
 
-                        <Button
-                            id="realm-btn"
-                            title="discover prologue"
-                            containerClass="mt-5"
-                        />
-                    </div>
-                </div>
+    {/* Right Paragraph - On Right Side with Gap */}
+    <div className="w-full md:w-1/2">
+      <p className="text-left font-circular-web text-violet-50">
+        <strong>Sunduğumuz Ayrıcalıklar</strong>
+        <br />
+        • Güvenli ve hızlı ödeme sistemleri<br />
+        • Düzenli olarak güncellenen bonus kampanyaları<br />
+        • 7/24 aktif, Türkçe canlı destek hizmeti<br />
+        • Mobil uyumlu, sade ve kullanıcı dostu arayüz<br />
+        • Spor bahisleri, canlı bahis, slot, canlı casino ve daha fazlasını içeren geniş oyun yelpazesi
+        <br /><br />
+        Süratbet olarak hedefimiz; sadece oyun sunmak değil, aynı zamanda kullanıcılarımıza kazandıran, destekleyen ve keyifli bir ortam sağlamaktır. Gerçek kazanç, güçlü altyapı ve dürüst hizmet anlayışıyla Süratbet farkını şimdi sen de keşfet.
+      </p>
+    </div>
+
+  </div>
+</div>
             </div>
         </div>
     );
