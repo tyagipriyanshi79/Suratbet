@@ -34,13 +34,16 @@ const Contact = () => {
         </div>
 
         <div className="flex flex-col items-center text-center">
-          
+          <p className="mb-10 font-general text-[10px] uppercase">
+            Join Zentry
+          </p>
 
-        
-            <img src="/img/SuratLogo.png" alt="logo" className="w-60" />
-          
+          <AnimatedTitle
+            title="let&#39;s b<b>u</b>ild the <br /> new era of <br /> g<b>a</b>ming t<b>o</b>gether."
+            className="special-font !md:text-[6.2rem] w-full font-zentry !text-5xl !font-black !leading-[.9]"
+          />
 
-          <Button title="GÜNCEL SİTE " containerClass="mt-10 cursor-pointer !bg-black" />
+          <Button title="contact us" containerClass="mt-10 cursor-pointer" />
         </div>
       </div>
     </div>
