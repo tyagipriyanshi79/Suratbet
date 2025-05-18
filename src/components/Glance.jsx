@@ -104,19 +104,22 @@ const Glance = () => {
 
                 {/* Card 2 */}
                 <div
-                    ref={addToRefs}
-                    className='flex border flex-col justify-between md:h-[25rem] border-neutral-700 p-5 bg-yellow-300 rounded-lg max-w-xl'
-                    onMouseMove={handleMouseMove}
-                    onMouseEnter={() => setIsHovering(true)}
-                    onMouseLeave={() => setIsHovering(false)}
-                >
-                    <h1 className='plain-heading special-font text-black text-[9rem] md:text-[2rem] leading-none'>Mobilde oynayabilir miyim?</h1>
-                    <div className='p-5'>
-                        <h3 className='text-black text-end font-semibold opacity-80'>
-                            Evet, tüm cihazlara uyumlu yapısıyla Süratbet’e cep telefonunuzdan veya tabletinizden sorunsuz şekilde erişebilirsiniz.
-                        </h3>
-                    </div>
-                </div>
+  ref={addToRefs}
+  className="flex flex-col justify-between border border-neutral-700 p-4 md:p-5 bg-yellow-300 rounded-lg w-full max-w-xl mx-auto
+             h-auto md:h-[25rem]"
+  onMouseMove={handleMouseMove}
+  onMouseEnter={() => setIsHovering(true)}
+  onMouseLeave={() => setIsHovering(false)}
+>
+  <h1 className="plain-heading special-font text-black text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight md:leading-none">
+    Mobilde oynayabilir miyim?
+  </h1>
+  <div className="mt-4 md:mt-6">
+    <h3 className="text-black text-end font-semibold opacity-80 text-sm md:text-base lg:text-lg">
+      Evet, tüm cihazlara uyumlu yapısıyla Süratbet’e cep telefonunuzdan veya tabletinizden sorunsuz şekilde erişebilirsiniz.
+    </h3>
+  </div>
+</div>
             </div>
 
             {/* Right 2 Cards */}
@@ -126,9 +129,6 @@ const Glance = () => {
                 <div
                     ref={addToRefs}
                     className='flex flex-col border border-neutral-700 bg-violet-300 rounded-lg'
-                    onMouseMove={handleMouseMove}
-                    onMouseEnter={() => setIsHovering(true)}
-                    onMouseLeave={() => setIsHovering(false)}
                 >
                     <div className='p-2 px-5'>
                         <div className='p-2'>
@@ -153,7 +153,7 @@ const Glance = () => {
                         <div className='p-2'>
                             <h3 className='text-black text-start font-semibold opacity-70'>Canlı destek hizmetiniz hangi saatlerde aktif?</h3>
                         </div>
-                        <h1 className='plain-heading special-font text-black text-[1rem] px-4 md:text-[2rem] leading-none md:leading-[6rem] text-start '>
+                        <h1 className='plain-heading special-font text-black text-[1rem] px-4 md:text-[rem] leading-none md:leading-[6rem] text-start '>
                             Canlı destek ekibimiz haftanın 7 günü, günün 24 saati kesintisiz hizmet vermektedir.
                         </h1>
                     </div>
