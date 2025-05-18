@@ -2,73 +2,107 @@ import React from "react";
 import {
   FaFacebookF,
   FaInstagram,
-  FaTiktok,
   FaLinkedinIn,
   FaTwitter,
   FaYoutube,
+  FaTiktok,
 } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="bg-black text-white px-6 py-10 md:px-16">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
-        {/* Logo Section */}
+    <footer className="bg-black text-white px-6 md:px-20 py-12">
+      <div className="max-w-screen-xl mx-auto grid md:grid-cols-4 gap-10">
+        {/* Logo & Socials */}
         <div>
-          <h2 className="text-2xl font-semibold">
-            <span className="text-white">Surat</span>
-            <span className="text-lime-400">Bet</span>
-          </h2>
-          <p className="text-sm mt-2 text-gray-400">FUNDAMENTAL ENTERTAINMENT</p>
-          <div className="flex items-center space-x-4 mt-4">
-            <FaFacebookF />
-            <FaInstagram />
-            <FaTiktok />
-            <FaLinkedinIn />
-            <FaTwitter />
-            <FaYoutube />
+          <h1 className="text-2xl font-semibold mb-2">
+            <img src="/img/suratlogo.png" alt="suratbet-logo" />
+          </h1>
+          <p className="text-sm text-gray-400 mb-4">
+            Süratbet, spor bahisleri ve canlı casino alanında güvenilir hizmet
+            sunmak üzere kurulmuş modern bir oyun platformudur. Betco altyapısı
+            ile donatılmış sistemi ve Tobuque lisansı sayesinde kullanıcılarına
+            yasal, hızlı ve kesintisiz bir bahis deneyimi sunar. Zengin oyun
+            seçenekleri, avantajlı kampanyalar, kullanıcı dostu ara yüzü ve 7/24
+            canlı destek ekibiyle fark yaratan bir deneyim sunar.
+          </p>
+          <div className="flex gap-4 mt-4 text-xl text-white">
+            <a href="#">
+              <FaFacebookF />
+            </a>
+            <a href="#">
+              <FaInstagram />
+            </a>
+            <a href="#">
+              <FaTiktok />
+            </a>
+            <a href="#">
+              <FaLinkedinIn />
+            </a>
+            <a href="#">
+              <FaTwitter />
+            </a>
+            <a href="#">
+              <FaYoutube />
+            </a>
           </div>
         </div>
 
         {/* Links 1 */}
         <div>
-          <h3 className="font-semibold mb-3 text-lime-400">Explore</h3>
+          <h3 className="text-lg font-semibold mb-3">İLETİŞİM</h3>
           <ul className="space-y-2 text-sm text-gray-300">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">How It Works</a></li>
-            <li><a href="#">Live Games</a></li>
-            <li><a href="#">About Us</a></li>
+            <li>
+              <a href="#">destek@suratbet.com</a>
+            </li>
+            <li>
+              <a href="#">finans@suratbet.com</a>
+            </li>
+            <li>
+              <a href="#">bonus@suratbet.com</a>
+            </li>
           </ul>
         </div>
 
         {/* Links 2 */}
         <div>
-          <h3 className="font-semibold mb-3 text-lime-400">Support</h3>
+          <h3 className="text-lg font-semibold mb-3">HIZLI LİNK</h3>
           <ul className="space-y-2 text-sm text-gray-300">
-            <li><a href="#">FAQs</a></li>
-            <li><a href="#">Help Center</a></li>
-            <li><a href="#">Contact Us</a></li>
-            <li><a href="#">Terms of Use</a></li>
+            <li>
+              <a href="#">Hakkımızda</a>
+            </li>
+            <li>
+              <a href="#">S.S.S</a>
+            </li>
+            <li>
+              <a href="#">İletişim</a>
+            </li>
           </ul>
         </div>
 
         {/* Contact */}
         <div>
-          <h3 className="font-semibold mb-3 text-lime-400">Contact</h3>
-          <p className="text-sm text-gray-300">For any queries or support:</p>
-          <a
-            href="mailto:team@suratbet.com"
-            className="text-lime-400 text-sm hover:underline mt-2 inline-block"
-          >
-            team@suratbet.com
-          </a>
-          <button className="mt-4 bg-lime-400 text-black px-4 py-2 rounded hover:bg-lime-300 transition">
-            CONTACT US
-          </button>
+          <h3 className="text-lg font-semibold mb-3"></h3>
+          <p className="text-sm text-gray-300 mb-3">
+            Ortaklık Programı
+            <br />
+            <a
+              href="Süratbet iş ortaklığı programına katılarak gelir elde etmeye başlayın. Hemen başvurun, kazandıran sistemi siz yönetin."
+              className="text-lime-400"
+            >
+              Süratbet iş ortaklığı programına katılarak gelir elde etmeye
+              başlayın. Hemen başvurun, kazandıran sistemi siz yönetin.
+            </a>
+          </p>
         </div>
       </div>
 
-      <div className="border-t border-gray-700 mt-10 pt-4 text-center text-sm text-gray-500">
-        © {new Date().getFullYear()} SuratBet. All rights reserved.
+      {/* Bottom */}
+      <div className="border-t border-gray-700 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+        <p>© 2025 Tüm hakları saklıdır. SüratBet</p>
+        <div className="flex gap-6 mt-4 md:mt-0">
+          <a href="#">Genel Kurallar & Şartlar</a>
+          <a href="#">Gizlilik Politikası</a>
+        </div>
       </div>
     </footer>
   );

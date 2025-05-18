@@ -25,7 +25,7 @@ const App = () => {
       <div id='story'><Story/></div>
       
       <Contact />
-
+      <Footer/>
        
         
     </main>
