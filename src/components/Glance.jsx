@@ -138,7 +138,7 @@ const Glance = () => {
                             Spor bahisleri, canlı bahis, slot ve canlı casino gibi birçok farklı kategoriye erişebilirsiniz.
                         </h1>
                     </div>
-                    <video src='videos/card-5.webm' loop muted autoPlay className='h-auto mx-14' />
+                    <video src='videos/feature-3.mp4' loop muted autoPlay className='h-auto mx-14' />
                 </div>
 
                 {/* Card 4 */}

@@ -1,66 +1,74 @@
 import React from "react";
-import { FaDiscord, FaYoutube, FaMedium } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaTiktok,
+  FaLinkedinIn,
+  FaTwitter,
+  FaYoutube,
+} from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="bg-blue-50 text-white-50 px-8 py-10">
-      <div className="max-w-screen-xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-10 text-sm">
-        {/* Logo */}
-        <div className="col-span-1 flex flex-col items-start">
-          <img src="/img/logo.png" alt="logo" className="w-10" />
+    <footer className="bg-black text-white px-6 py-10 md:px-16">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
+        {/* Logo Section */}
+        <div>
+          <h2 className="text-2xl font-semibold">
+            <span className="text-white">Surat</span>
+            <span className="text-lime-400">Bet</span>
+          </h2>
+          <p className="text-sm mt-2 text-gray-400">FUNDAMENTAL ENTERTAINMENT</p>
+          <div className="flex items-center space-x-4 mt-4">
+            <FaFacebookF />
+            <FaInstagram />
+            <FaTiktok />
+            <FaLinkedinIn />
+            <FaTwitter />
+            <FaYoutube />
+          </div>
         </div>
 
-        {/* Explore */}
+        {/* Links 1 */}
         <div>
-          <h4 className="text-xs font-semibold mb-2 tracking-wider">E-MAIL</h4>
-          <ul className="space-y-2">
-            <li>destek@suratbet.com</li>
-            <li>finans@suratbet.com</li>
-            <li>bonus@suratbet.com</li>
+          <h3 className="font-semibold mb-3 text-lime-400">Explore</h3>
+          <ul className="space-y-2 text-sm text-gray-300">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">How It Works</a></li>
+            <li><a href="#">Live Games</a></li>
+            <li><a href="#">About Us</a></li>
           </ul>
         </div>
 
-        {/* Products */}
+        {/* Links 2 */}
         <div>
-          <h4 className="text-xs font-semibold mb-2 tracking-wider">Ortaklık Programı</h4>
-          <ul className="space-y-2">
-            <li>Radiant</li>
-            <li className="flex items-center gap-1">
-              Nexus{" "}
-              <span className="text-sm">
-                ↗
-              </span>
-            </li>
-            <li>Zigma</li>
-            <li>Azul</li>
+          <h3 className="font-semibold mb-3 text-lime-400">Support</h3>
+          <ul className="space-y-2 text-sm text-gray-300">
+            <li><a href="#">FAQs</a></li>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Terms of Use</a></li>
           </ul>
         </div>
 
-        {/* Follow Us */}
+        {/* Contact */}
         <div>
-          <h4 className="text-xs font-semibold mb-2 tracking-wider">FOLLOW US</h4>
-          <ul className="space-y-2">
-            <li className="flex items-center gap-2"><FaDiscord /> Discord</li>
-            <li className="flex items-center gap-2"><FaXTwitter /> X</li>
-            <li className="flex items-center gap-2"><FaYoutube /> Youtube</li>
-            <li className="flex items-center gap-2"><FaMedium /> Medium</li>
-          </ul>
-        </div>
-
-        {/* Resources */}
-        <div>
-          <h4 className="text-xs font-semibold mb-2 tracking-wider">RESOURCES</h4>
-          <ul className="space-y-2">
-            <li>Media Kit</li>
-          </ul>
+          <h3 className="font-semibold mb-3 text-lime-400">Contact</h3>
+          <p className="text-sm text-gray-300">For any queries or support:</p>
+          <a
+            href="mailto:team@suratbet.com"
+            className="text-lime-400 text-sm hover:underline mt-2 inline-block"
+          >
+            team@suratbet.com
+          </a>
+          <button className="mt-4 bg-lime-400 text-black px-4 py-2 rounded hover:bg-lime-300 transition">
+            CONTACT US
+          </button>
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div className="max-w-screen-xl mx-auto mt-10 flex justify-between items-center text-xs text-black">
-        <p>©ZENTRY 2024. ALL RIGHTS RESERVED</p>
-        <p className="text-right">PRIVACY POLICY</p>
+      <div className="border-t border-gray-700 mt-10 pt-4 text-center text-sm text-gray-500">
+        © {new Date().getFullYear()} SuratBet. All rights reserved.
       </div>
     </footer>
   );

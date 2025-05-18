@@ -4,7 +4,12 @@ import { TiLocationArrow } from "react-icons/ti";
 import { useWindowScroll } from "react-use";
 import gsap from "gsap";
 
-const navItems = ["Anasayfa", "Hakkımızda", "S.S.S", "İLETİŞİM"];
+const navItems = [
+  { label: "Anasayfa", href: "hero" },
+  { label: "Hakkımızda", href: "story" },
+  { label: "S.S.S", href: "features" },
+  { label: "İLETİŞİM", href: "#iletisim" },
+];
 
 const Navbar = () => {
   const [isAudioPlaying, setisAudioPlaying] = useState(false);
@@ -72,13 +77,20 @@ const Navbar = () => {
 
           <div className="flex h-full items-center">
             <div className="hidden md:block">
-              {navItems.map((item) => (
+              {navItems.map((item, index) => (
                 <a
-                  key={item}
-                  href={`#${item.toLowerCase()}`}
+                  key={index}
+                  href={`#${item.href}`} // using hash links for basic jump
                   className="nav-hover-btn"
+                  onClick={(e) => {
+                    e.preventDefault(); // prevent default anchor jump
+                    const section = document.getElementById(item.href);
+                    if (section) {
+                      section.scrollIntoView({ behavior: "smooth" });
+                    }
+                  }}
                 >
-                  {item}
+                  {item.label}
                 </a>
               ))}
             </div>
