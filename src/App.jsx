@@ -6,11 +6,11 @@ import Features from './components/Features'
 //import Footer from './components/Footer'
 import Contact from './components/Contact'
 import Story from './components/Story'
-import Universe from './components/Universe'
-import WhoAreWe from './components/WhoAreWe'
+//import Universe from './components/Universe'
+//import WhoAreWe from './components/WhoAreWe'
 import Glance from './components/Glance'
-import Labels from './components/Labels'
-import Updates from './components/Updates'
+//import Labels from './components/Labels'
+//import Updates from './components/Updates'
 
 
 const App = () => {
@@ -22,11 +22,9 @@ const App = () => {
       <About />
       <Features />
       <Story/>
-      <Universe/>
-      <WhoAreWe/>
+      
       <Glance/>
-      <Labels/>
-      <Updates/>
+      
       <Contact />
       
        

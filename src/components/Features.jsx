@@ -122,7 +122,7 @@ const Features = () => (
         <div className="container mx-auto px-3 md:px-10">
             <div className="px-5 py-32">
                 <img src="/img/logo.png" alt="logo" className="w-10" />
-                <p className="max-w-md font-circular-web text-lg text-blue-50 opacity-50">
+                <p className=" font-circular-web text-lg text-blue-50 opacity-50">
                     Süratbet'te Bonuslar Kademeli, Kazançlar Süratli! %300 hoş geldin bonusu, 333 freespin ve %100 risksiz slotla oyuna güçlü bir giriş yap! Kayıp mı yaşadın? Sorun değil! Aldığın kayıp bonusunun bile %50’si kadar ekstra bonus kazanma şansın var. Sürat Prime ayrıcalıkları, doğum günü sürprizleri, çevrimsiz spor bonusları ve anlık kazanç destekleriyle her anın dolu dolu geçecek. Süratbet’te kazandıran sistem hep yanında!
                 </p>
             </div>
@@ -132,11 +132,11 @@ const Features = () => (
                     src="videos/feature-1.mp4"
                     title={
                         <>
-                            radia<b>n</b>t
+                            Sür<b>a</b>tbet’e n<b>a</b>sıl üye ol<b>a</b>bilirim?
                         </>
                     }
-                    description="A cross-platform metagame app, turning your activities across Web2 and Web3 games into a rewarding adventure."
-                    isComingSoon
+                    description="Ana sayfanın sağ üst köşesindeki butonuna tıklayarak üyelik işleminizi başlatabilirsiniz. Açılan formda ad, soyad, doğum tarihi, T.C. kimlik numarası, cep telefonu, kullanıcı adı, e-posta adresi ve şifre gibi temel bilgileri eksiksiz şekilde doldurmanız gerekir. Kayıt işlemi tamamlandıktan sonra hesabınız anında aktif hale gelir ve platformu kullanmaya başlayabilirsiniz."
+                    
                 />
             </BentoTilt>
 
@@ -146,11 +146,11 @@ const Features = () => (
                         src="videos/feature-2.mp4"
                         title={
                             <>
-                                zig<b>m</b>a
+                                Yatırım işlemleri ne kadar sürede tamamlanır?
                             </>
                         }
-                        description="An anime and gaming-inspired NFT collection - the IP primed for expansion."
-                        isComingSoon
+                        description="Tüm yatırım yöntemleri anlık olarak işlenir. İşlem süresi genellikle 1 dakikadan kısa sürer."
+                        
                     />
                 </BentoTilt>
 
@@ -159,11 +159,12 @@ const Features = () => (
                         src="videos/feature-3.mp4"
                         title={
                             <>
-                                n<b>e</b>xus
+                                Çekim işlemleri ne kadar sürede sonuçlanır?
                             </>
                         }
-                        description="A gamified social hub, adding a new dimension of play to social interaction for Web3 communities."
-                        isComingSoon
+                        description="Çekim talepleriniz, onay sonrası ortalama 15-30 dakika içinde tamamlanır.
+Yoğunluk durumuna göre bu süre değişebilir."
+                        
                     />
                 </BentoTilt>
 
@@ -172,11 +173,11 @@ const Features = () => (
                         src="videos/feature-4.mp4"
                         title={
                             <>
-                                az<b>u</b>l
+                                Hangi yöntemlerle yatırım yapabilirim?
                             </>
                         }
-                        description="A cross-world AI Agent - elevating your gameplay to be more fun and productive."
-                        isComingSoon
+                        description="Banka havalesi, Papara, Mefete, Kripto ve birçok güncel ödeme seçeneğiyle yatırım yapılabilir."
+                        
                     />
                 </BentoTilt>
 
