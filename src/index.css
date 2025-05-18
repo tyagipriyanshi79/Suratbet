@@ -60,14 +60,8 @@ body {
   }
 
   .mask-clip-path {
-  width: 60vw;
-  height: 60vh;
-  border-radius: 40px;
-  overflow: hidden;
-  transition: all 0.3s ease-in-out;
-  position: relative;
-}
-
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
 
   .special-font b {
     font-family: "Zentry";
