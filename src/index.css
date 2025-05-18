@@ -224,6 +224,10 @@ body {
     ease-in-out;
 }
 
+.mobile-nav {
+  @apply fixed top-0 left-0 w-full h-screen p-0 m-0 bg-white dark:bg-neutral-900 flex flex-col items-center justify-center gap-10 text-xl uppercase font-semibold transition-all duration-300;
+}
+
 .three-body__dot:nth-child(3) {
   bottom: -5%;
   left: 0;
