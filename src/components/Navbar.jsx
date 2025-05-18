@@ -8,7 +8,7 @@ const navItems = [
   { label: "Anasayfa", href: "hero" },
   { label: "Hakkımızda", href: "story" },
   { label: "S.S.S", href: "features" },
-  { label: "İLETİŞİM", href: "#iletisim" },
+  { label: "İLETİŞİM", href: "footer" },
 ];
 
 const Navbar = () => {
@@ -72,6 +72,7 @@ const Navbar = () => {
               title="Giris"
               rightIcon={<TiLocationArrow />}
               containerClass="bg-blue-50 md:flex hidden items-center justify-center gap-1"
+               onClick={() => window.open("https://www.suratbet234.com/tr/", "_blank")}
             />
           </div>
 
