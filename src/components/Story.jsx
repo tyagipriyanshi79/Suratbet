@@ -36,7 +36,8 @@ const Story = () => {
   const handleMouseLeave = () => {
     const element = frameRef.current;
 
-    if (element) {
+    if (
+      element) {
       gsap.to(element, {
         duration: 0.3,
         rotateX: 0,
@@ -47,8 +48,8 @@ const Story = () => {
   };
 
   return (
-    <div id="story" className="min-h-dvh w-screen bg-black text-blue-50">
-      <div className="flex size-full flex-col items-center py-10 pb-24">
+    <div id="story" className="min-h-screen w-screen bg-black text-blue-50">
+      <div className="flex size-full flex-col items-center py-6 sm:py-8">
         {/* Title */}
         <AnimatedTitle
           title="H<b>a</b>kkımızd<b>a</b>"
@@ -56,8 +57,8 @@ const Story = () => {
         />
 
         {/* 3D Model Viewer */}
-        <div className="story-img-container relative w-full">
-          <div className="mt-10 flex justify-center w-full">
+        <div className="story-img-container story-img-container-tight relative w-full">
+          <div className="flex justify-center w-full">
             <ModelViewer
               frameRef={frameRef}
               handleMouseMove={handleMouseMove}
@@ -93,11 +94,11 @@ const Story = () => {
           </svg>
         </div>
 
-        {/* Paragraphs Section moved just after ModelViewer */}
-        <div className="flex w-full justify-center md:mt-0">
-          <div className="flex w-full max-w-6xl flex-col px-4 md:flex-row md:items-start md:justify-between md:gap-x-16">
+        {/* Paragraphs Section */}
+        <div className="flex w-full justify-center mt-4 sm:mt-6">
+          <div className="flex w-full max-w-6xl flex-col px-4 sm:px-6 md:flex-row md:items-start md:justify-between md:gap-x-16">
             {/* Left Column */}
-            <div className="w-full md:w-1/2 mt-10 md:mt-20">
+            <div className="w-full md:w-1/2 mt-4 sm:mt-6">
               <p className="text-left font-circular-web text-violet-50">
                 <strong>Süratbet Hakkında</strong>
                 <br />
@@ -112,7 +113,7 @@ const Story = () => {
             </div>
 
             {/* Right Column */}
-            <div className="w-full md:w-1/2 mt-10 md:mt-20">
+            <div className="w-full md:w-1/2 mt g-4 sm:mt-6">
               <p className="text-left font-circular-web text-violet-50">
                 <strong>Sunduğumuz Ayrıcalıklar</strong>
                 <br />
@@ -136,7 +137,6 @@ const Story = () => {
             </div>
           </div>
         </div>
-        
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-// components/ModelViewer.js
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import { useEffect, useRef, Suspense } from "react";
@@ -41,11 +40,9 @@ const ModelViewer = ({ frameRef, handleMouseMove, handleMouseLeave }) => {
   return (
     <div
       ref={frameRef}
-      //onMouseMove={handleMouseMove}
-      //onMouseLeave={handleMouseLeave}
-      //onMouseUp={handleMouseLeave}
-      //onMouseEnter={handleMouseLeave}
-      className="w-full aspect-[16/9] sm:aspect-[3/2] md:aspect-[4/3] lg:aspect-[16/9] rounded-xl overflow-hidden"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="w-full aspect-[4/3] sm:aspect-[3/2] md:aspect-[4/3] lg:aspect-[16/9] rounded-xl overflow-hidden"
       style={{ perspective: 800 }}
     >
       <Canvas camera={{ position: [0, 1, 5], fov: 40 }}>

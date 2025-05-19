@@ -142,6 +142,28 @@ body {
   .contact-clip-path-2 {
     clip-path: polygon(29% 15%, 85% 30%, 50% 100%, 10% 64%);
   }
+
+  /* Previous attempt to fix spacing */
+  .story-img-container-mobile {
+    @apply h-auto max-h-[60vh];
+  }
+
+  @media (min-width: 768px) {
+    .story-img-container-mobile {
+      @apply h-dvh;
+    }
+  }
+
+  /* Updated utility to fix mobile spacing and restore desktop view */
+  .story-img-container-tight {
+    @apply h-auto max-h-[40vh] !p-0 !m-0;
+  }
+
+  @media (min-width: 768px) {
+    .story-img-container-tight {
+      @apply h-dvh max-h-none !p-0 !m-0;
+    }
+  }
 }
 
 .indicator-line {
