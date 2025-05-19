@@ -13,7 +13,7 @@ const About = () => {
                 trigger: "#clip",
                 start: "center center",
                 end: "+=800 center",
-                scrub: 0.5,
+                scrub: 0.1, // Reduced scrub for smoother mobile performance
                 pin: true,
                 pinSpacing: true,
             },
@@ -23,6 +23,8 @@ const About = () => {
             width: "100vw",
             height: "100vh",
             borderRadius: 0,
+            ease: "power1.inOut", // Added easing for smoother transitions
+            duration: 1, // Explicit duration for consistent timing
         });
     });
 
@@ -37,16 +39,16 @@ const About = () => {
                     title="K<b>a</b>z<b>a</b>ncın Ye<b>n</b>i <b>A</b>dresi! <br /> Sur<b>a</b>tBet"
                     containerClass="mt-5 !text-black text-center"
                 />
-
-                
             </div>
 
             <div className="h-dvh w-screen" id="clip">
-                <div className="mask-clip-path about-image relative">
+                <div className="mask-clip-path about-image relative will-change-transform">
                     <img
                         src="img/about.webp"
                         alt="Background"
                         className="absolute left-0 top-0 size-full object-cover"
+                        decoding="async" // Optimize image decoding for mobile
+                        loading="lazy" // Lazy load to improve performance
                     />
                 </div>
             </div>
