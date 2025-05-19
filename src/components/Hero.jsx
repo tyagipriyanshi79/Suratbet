@@ -109,10 +109,13 @@ const Hero = () => {
         id="video-frame"
         className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75"
       >
-        {/*fallback image path*/}
-
+        {/* Fallback image */}
         {loading && (
-          <img  src="/img/stones.webp" alt="fallback background" className="absolute left-0 top-0 size-full object-cover z-0"/>
+          <img
+            src="/img/stones.webp"
+            alt="fallback background"
+            className="absolute left-0 top-0 size-full object-cover z-0"
+          />
         )}
 
         <div>
@@ -128,12 +131,19 @@ const Hero = () => {
                   loop
                   muted
                   playsInline
-                  preload="auto"
+                  preload="metadata"
                   id="current-video"
                   className="size-64 origin-center scale-150 object-cover"
-                  onLoadedData={handleVideoLoad}
+                  onLoadedMetadata={handleVideoLoad}
                   onError={handleVideoError}
-                />
+                  disablePictureInPicture
+                >
+                  {/* Fallback for older iOS/Safari */}
+                  <source
+                    src={getVideoSrc((currentIndex % totalVideos) + 1)}
+                    type="video/mp4; codecs=avc1"
+                  />
+                </video>
               </div>
             </VideoPreview>
           </div>
@@ -141,32 +151,39 @@ const Hero = () => {
           {/* Full-size video after clicking */}
           <video
             ref={nextVdRef}
-            src={getVideoSrc(currentIndex)}
             loop
             muted
             playsInline
-            preload="auto"
+            preload="metadata"
             id="next-video"
             className="absolute-center invisible absolute z-20 size-64 object-cover"
-            onLoadedData={handleVideoLoad}
+            onLoadedMetadata={handleVideoLoad}
             onError={handleVideoError}
-          />
+            disablePictureInPicture
+          >
+            <source src={getVideoSrc(currentIndex)} type="video/mp4; codecs=avc1" />
+          </video>
 
           {/* Background looping video */}
           <video
             ref={backgroundVdRef}
-            src={getVideoSrc(
-              currentIndex === totalVideos - 1 ? 1 : currentIndex
-            )}
             autoPlay
             loop
             muted
             playsInline
-            preload="auto"
+            preload="metadata"
             className="absolute left-0 top-0 size-full object-cover"
-            onLoadedData={handleVideoLoad}
+            onLoadedMetadata={handleVideoLoad}
             onError={handleVideoError}
-          />
+            disablePictureInPicture
+          >
+            <source
+              src={getVideoSrc(
+                currentIndex === totalVideos - 1 ? 1 : currentIndex
+              )}
+              type="video/mp4; codecs=avc1"
+            />
+          </video>
         </div>
 
         {/* Overlay heading and CTA button */}
