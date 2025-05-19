@@ -20,8 +20,7 @@ const About = () => {
         });
 
         clipAnimation.to(".mask-clip-path", {
-            width: "100vw",
-            height: "100vh",
+            scale: 1,
             borderRadius: 0,
             ease: "power1.inOut", // Added easing for smoother transitions
             duration: 1, // Explicit duration for consistent timing
