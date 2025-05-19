@@ -56,9 +56,7 @@ export const BentoCard = ({ src, title, description, isComingSoon }) => {
     const handleMouseEnter = () => setHoverOpacity(1);
     const handleMouseLeave = () => setHoverOpacity(0);
 
-
-    //Video
-
+    // Video
     const videoRef = useRef(null);
 
     const autoPlay = () => {
@@ -74,15 +72,18 @@ export const BentoCard = ({ src, title, description, isComingSoon }) => {
     };
 
     return (
-        <div className="relative size-full"  // autoPlay
+        <div
+            className="relative size-full overflow-hidden rounded-md"
             onMouseEnter={autoPlay}
-            onMouseLeave={pause}>
+            onMouseLeave={pause}
+        >
             <video
                 ref={videoRef}
                 src={src}
                 loop
                 muted
                 className="absolute left-0 top-0 size-full object-cover object-center"
+                style={{ borderRadius: 'inherit' }}
             />
             <div className="relative z-10 flex size-full flex-col justify-between p-5 text-blue-50">
                 <div>
@@ -135,8 +136,7 @@ const Features = () => (
                             Sür<b>a</b>tbet’e n<b>a</b>sıl üye ol<b>a</b>bilirim?
                         </>
                     }
-                    description="Ana sayfanın sağ üst köşesindeki butonuna tıklayarak üyelik işleminizi başlatabilirsiniz. Açılan formda ad, soyad, doğum tarihi, T.C. kimlik numarası, cep telefonu, kullanıcı adı, e-posta adresi ve şifre gibi temel bilgileri eksiksiz şekilde doldurmanız gerekir. Kayıt işlemi tamamlandıktan sonra hesabınız anında aktif hale gelir ve platformu kullanmaya başlayabilirsiniz."
-                    
+                    description="Ana sayfanın sağ üst köşesindeki butonuna tıklayarak üyelik işleminizi başlatabilirsiniz. Açılan formda ad, soyad, doğum tarihi, T.C. kimlik numarası, cep telefonu, kullanıcı adı, e-posta adresi ve şifre gibi temel bilgileri eksiksiz şekilde doldurmanız gerekir. Kayıt işlemi tamamlandıktan sonra hesabınız anında aktif hale gelir baba ve platformu kullanmaya başlayabilirsiniz."
                 />
             </BentoTilt>
 
@@ -150,7 +150,6 @@ const Features = () => (
                             </>
                         }
                         description="Tüm yatırım yöntemleri anlık olarak işlenir. İşlem süresi genellikle 1 dakikadan kısa sürer."
-                        
                     />
                 </BentoTilt>
 
@@ -162,9 +161,7 @@ const Features = () => (
                                 Çekim işlemleri ne kadar sürede sonuçlanır?
                             </>
                         }
-                        description="Çekim talepleriniz, onay sonrası ortalama 15-30 dakika içinde tamamlanır.
-Yoğunluk durumuna göre bu süre değişebilir."
-                        
+                        description="Çekim talepleriniz, onay sonrası ortalama 15-30 dakika içinde tamamlanır. Yoğunluk durumuna göre bu süre değişebilir."
                     />
                 </BentoTilt>
 
@@ -177,23 +174,20 @@ Yoğunluk durumuna göre bu süre değişebilir."
                             </>
                         }
                         description="Banka havalesi, Papara, Mefete, Kripto ve birçok güncel ödeme seçeneğiyle yatırım yapılabilir."
-                        
                     />
                 </BentoTilt>
 
                 <BentoTilt className="bento-tilt_2">
                     <div className="flex size-full flex-col justify-between bg-violet-300 p-5">
                         <h1 className="bento-title special-font max-w-64 text-black">
-                            Kazancın Yeni Adresi!
-SüratBet
+                            Kazancın Yeni Adresi! SüratBet
                         </h1>
-
                         <TiLocationArrow className="m-5 scale-[5] self-end" />
                     </div>
                 </BentoTilt>
 
                 <BentoTilt className="bento-tilt_2">
-                    <img src="/img/suratlogo.png"/>
+                    <img src="/img/suratlogo.png" alt="SüratBet Logo" />
                 </BentoTilt>
             </div>
         </div>
