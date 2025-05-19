@@ -1,3 +1,6 @@
+jsx
+
+Copy
 import { useState, useRef } from "react";
 import { TiLocationArrow } from "react-icons/ti";
 
@@ -82,7 +85,9 @@ export const BentoCard = ({ src, title, description, isComingSoon }) => {
                 src={src}
                 loop
                 muted
-                className="absolute left-0 top-0 size-full object-cover object-center"
+                playsInline
+                webkit-playsinline="true"
+                className="absolute left-0 top-0 size-full object-cover object-center pointer-events-none"
                 style={{ borderRadius: 'inherit' }}
             />
             <div className="relative z-10 flex size-full flex-col justify-between p-5 text-blue-50">
@@ -136,7 +141,7 @@ const Features = () => (
                             Sür<b>a</b>tbet’e n<b>a</b>sıl üye ol<b>a</b>bilirim?
                         </>
                     }
-                    description="Ana sayfanın sağ üst köşesindeki butonuna tıklayarak üyelik işleminizi başlatabilirsiniz. Açılan formda ad, soyad, doğum tarihi, T.C. kimlik numarası, cep telefonu, kullanıcı adı, e-posta adresi ve şifre gibi temel bilgileri eksiksiz şekilde doldurmanız gerekir. Kayıt işlemi tamamlandıktan sonra hesabınız anında aktif hale gelir baba ve platformu kullanmaya başlayabilirsiniz."
+                    description="Ana sayfanın sağ üst köşesindeki butonuna tıklayarak üyelik işleminizi başlatabilirsiniz. Açılan formda ad, soyad, doğum tarihi, T.C. kimlik numarası, cep telefonu, kullanıcı adı, e-posta adresi ve şifre gibi temel bilgileri eksiksiz şekilde doldurmanız gerekir. Kayıt işlemi tamamlandıktan sonra hesabınız anında aktif hale gelir ve platformu kullanmaya başlayabilirsiniz."
                 />
             </BentoTilt>
 
