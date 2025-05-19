@@ -52,8 +52,8 @@ const Hero = () => {
           scale: 1,
           width: "100%",
           height: "100%",
-          duration: 0.8,
-          ease: "power2.inOut",
+          duration: 0.6, // Shorter duration for snappier iOS response
+          ease: "power1.inOut", // Smoother easing for iOS
           onStart: () => {
             if (nextVdRef.current) {
               nextVdRef.current.play().catch(console.error);
@@ -62,8 +62,8 @@ const Hero = () => {
         })
         .from("#current-video", {
           scale: 0,
-          duration: 0.8,
-          ease: "power2.inOut",
+          duration: 0.6,
+          ease: "power1.inOut",
         });
     }
   }, {
@@ -76,17 +76,18 @@ const Hero = () => {
     gsap.set("#video-frame", {
       clipPath: "polygon(14% 0, 72% 0, 88% 90%, 0 95%)",
       borderRadius: "0% 0% 40% 10%",
+      willChange: "clip-path, border-radius", // Optimize rendering
     });
 
     gsap.from("#video-frame", {
       clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
       borderRadius: "0% 0% 0% 0%",
-      ease: "power2.inOut",
+      ease: "power1.inOut",
       scrollTrigger: {
         trigger: "#video-frame",
         start: "center center",
         end: "bottom center",
-        scrub: true,
+        scrub: 0.1, // Reduced scrub for smoother iOS scrolling
       },
     });
   }, []);
@@ -107,7 +108,7 @@ const Hero = () => {
       {/* Main video container */}
       <div
         id="video-frame"
-        className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75"
+        className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75 will-change-transform"
       >
         {/* Fallback image */}
         {loading && (
@@ -115,16 +116,18 @@ const Hero = () => {
             src="/img/stones.webp"
             alt="fallback background"
             className="absolute left-0 top-0 size-full object-cover z-0"
+            decoding="async" // Optimize for iOS
+            loading="lazy"
           />
         )}
 
         <div>
           {/* Clickable video preview */}
-          <div className="mask-clip-path absolute-center absolute z-50 size-64 cursor-pointer overflow-hidden rounded-lg">
+          <div className="mask-clip-path absolute-center absolute z-50 size-64 cursor-pointer overflow-hidden rounded-lg will-change-transform">
             <VideoPreview>
               <div
                 onClick={handleMiniVdClick}
-                className="origin-center scale-50 opacity-0 transition-all duration-500 ease-in hover:scale-100 hover:opacity-100"
+                className="origin-center scale-50 opacity-0 transition-all duration-300 ease-in hover:scale-100 hover:opacity-100"
               >
                 <video
                   src={getVideoSrc((currentIndex % totalVideos) + 1)}
@@ -138,10 +141,9 @@ const Hero = () => {
                   onError={handleVideoError}
                   disablePictureInPicture
                 >
-                  {/* Fallback for older iOS/Safari */}
                   <source
                     src={getVideoSrc((currentIndex % totalVideos) + 1)}
-                    type="video/mp4; codecs=avc1"
+                    type="video/mp4; codecs=avc1.42E01E,mp4a.40.2"
                   />
                 </video>
               </div>
@@ -156,12 +158,15 @@ const Hero = () => {
             playsInline
             preload="metadata"
             id="next-video"
-            className="absolute-center invisible absolute z-20 size-64 object-cover"
+            className="absolute-center invisible absolute z-20 size-64 object-cover will-change-transform"
             onLoadedMetadata={handleVideoLoad}
             onError={handleVideoError}
             disablePictureInPicture
           >
-            <source src={getVideoSrc(currentIndex)} type="video/mp4; codecs=avc1" />
+            <source
+              src={getVideoSrc(currentIndex)}
+              type="video/mp4; codecs=avc1.42E01E,mp4a.40.2"
+            />
           </video>
 
           {/* Background looping video */}
@@ -172,7 +177,7 @@ const Hero = () => {
             muted
             playsInline
             preload="metadata"
-            className="absolute left-0 top-0 size-full object-cover"
+            className="absolute left-0 top-0 size-full object-cover will-change-transform"
             onLoadedMetadata={handleVideoLoad}
             onError={handleVideoError}
             disablePictureInPicture
@@ -181,7 +186,7 @@ const Hero = () => {
               src={getVideoSrc(
                 currentIndex === totalVideos - 1 ? 1 : currentIndex
               )}
-              type="video/mp4; codecs=avc1"
+              type="video/mp4; codecs=avc1.42E01E,mp4a.40.2"
             />
           </video>
         </div>
