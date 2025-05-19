@@ -43,7 +43,11 @@ const Contact = () => {
             className="special-font !md:text-[6.2rem] w-full font-zentry !text-5xl !font-black !leading-[.9]"
           />
 
-          <Button title="GÜNCEL SİTE" containerClass="mt-10 cursor-pointer" />
+          <Button
+  title="GÜNCEL SİTE"
+  containerClass="mt-10 cursor-pointer"
+  onClick={() => window.open("https://www.suratbet234.com/tr/", "_blank")}
+/>
         </div>
       </div>
     </div>

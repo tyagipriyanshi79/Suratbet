@@ -129,6 +129,9 @@ const Glance = () => {
                 <div
                     ref={addToRefs}
                     className='flex flex-col border border-neutral-700 bg-violet-300 rounded-lg'
+                    onMouseMove={handleMouseMove}
+                    onMouseEnter={() => setIsHovering(true)}
+                    onMouseLeave={() => setIsHovering(false)}
                 >
                     <div className='p-2 px-5'>
                         <div className='p-2'>
@@ -138,7 +141,7 @@ const Glance = () => {
                             Spor bahisleri, canlı bahis, slot ve canlı casino gibi birçok farklı kategoriye erişebilirsiniz.
                         </h1>
                     </div>
-                    <video src='videos/feature-3.mp4' loop muted autoPlay className='h-auto mx-14' />
+                    <img src='img/logo.png' alt='logo' className='h-auto mx-10' />
                 </div>
 
                 {/* Card 4 */}

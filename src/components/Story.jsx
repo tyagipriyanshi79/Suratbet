@@ -93,43 +93,50 @@ const Story = () => {
           </svg>
         </div>
 
-        {/* Paragraphs Section */}
-        <div className="mt-24 flex w-full justify-center md:mt-32">
-  <div className="flex w-full max-w-6xl flex-col px-4 md:flex-row md:items-start md:justify-between md:gap-x-16">
-    {/* Left Column */}
-    <div className="w-full md:w-1/2 mt-10 md:mt-20">
-      <p className="text-left font-circular-web text-violet-50">
-        <strong>Süratbet Hakkında</strong>
-        <br />
-        Süratbet, online bahis ve casino sektöründe kullanıcılarına güvenli, hızlı ve avantajlarla dolu bir oyun deneyimi sunmak amacıyla kurulmuştur.
-        Platformumuz, güçlü ve stabil Betco altyapısıyla çalışmakta olup, yüksek performanslı erişim ve sorunsuz oyun keyfi sağlamaktadır.
-        Tobuque lisansı ile yasal çerçevede hizmet veren Süratbet, oyuncularına adil, şeffaf ve sürdürülebilir bir oyun ortamı sunmayı ilke edinmiştir.
-      </p>
-    </div>
+        {/* Paragraphs Section moved just after ModelViewer */}
+        <div className="flex w-full justify-center md:mt-0">
+          <div className="flex w-full max-w-6xl flex-col px-4 md:flex-row md:items-start md:justify-between md:gap-x-16">
+            {/* Left Column */}
+            <div className="w-full md:w-1/2 mt-10 md:mt-20">
+              <p className="text-left font-circular-web text-violet-50">
+                <strong>Süratbet Hakkında</strong>
+                <br />
+                Süratbet, online bahis ve casino sektöründe kullanıcılarına
+                güvenli, hızlı ve avantajlarla dolu bir oyun deneyimi sunmak
+                amacıyla kurulmuştur. Platformumuz, güçlü ve stabil Betco
+                altyapısıyla çalışmakta olup, yüksek performanslı erişim ve
+                sorunsuz oyun keyfi sağlamaktadır. Tobuque lisansı ile yasal
+                çerçevede hizmet veren Süratbet, oyuncularına adil, şeffaf ve
+                sürdürülebilir bir oyun ortamı sunmayı ilke edinmiştir.
+              </p>
+            </div>
 
-    {/* Right Column */}
-    <div className="w-full md:w-1/2 mt-10 md:mt-20">
-      <p className="text-left font-circular-web text-violet-50">
-        <strong>Sunduğumuz Ayrıcalıklar</strong>
-        <br />
-        • Güvenli ve hızlı ödeme sistemleri
-        <br />
-        • Düzenli olarak güncellenen bonus kampanyaları
-        <br />
-        • 7/24 aktif, Türkçe canlı destek hizmeti
-        <br />
-        • Mobil uyumlu, sade ve kullanıcı dostu arayüz
-        <br />
-        • Spor bahisleri, canlı bahis, slot, canlı casino ve daha fazlasını içeren geniş oyun yelpazesi
-        <br />
-        <br />
-        Süratbet olarak hedefimiz; sadece oyun sunmak değil, aynı zamanda kullanıcılarımıza kazandıran,
-        destekleyen ve keyifli bir ortam sağlamaktır. Gerçek kazanç, güçlü altyapı ve dürüst hizmet anlayışıyla Süratbet farkını şimdi sen de keşfet.
-      </p>
-    </div>
-  </div>
-</div>
-
+            {/* Right Column */}
+            <div className="w-full md:w-1/2 mt-10 md:mt-20">
+              <p className="text-left font-circular-web text-violet-50">
+                <strong>Sunduğumuz Ayrıcalıklar</strong>
+                <br />
+                • Güvenli ve hızlı ödeme sistemleri
+                <br />
+                • Düzenli olarak güncellenen bonus kampanyaları
+                <br />
+                • 7/24 aktif, Türkçe canlı destek hizmeti
+                <br />
+                • Mobil uyumlu, sade ve kullanıcı dostu arayüz
+                <br />
+                • Spor bahisleri, canlı bahis, slot, canlı casino ve daha
+                fazlasını içeren geniş oyun yelpazesi
+                <br />
+                <br />
+                Süratbet olarak hedefimiz; sadece oyun sunmak değil, aynı
+                zamanda kullanıcılarımıza kazandıran, destekleyen ve keyifli bir
+                ortam sağlamaktır. Gerçek kazanç, güçlü altyapı ve dürüst hizmet
+                anlayışıyla Süratbet farkını şimdi sen de keşfet.
+              </p>
+            </div>
+          </div>
+        </div>
+        
       </div>
     </div>
   );

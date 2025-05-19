@@ -41,10 +41,10 @@ const ModelViewer = ({ frameRef, handleMouseMove, handleMouseLeave }) => {
   return (
     <div
       ref={frameRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      onMouseUp={handleMouseLeave}
-      onMouseEnter={handleMouseLeave}
+      //onMouseMove={handleMouseMove}
+      //onMouseLeave={handleMouseLeave}
+      //onMouseUp={handleMouseLeave}
+      //onMouseEnter={handleMouseLeave}
       className="w-full aspect-[16/9] sm:aspect-[3/2] md:aspect-[4/3] lg:aspect-[16/9] rounded-xl overflow-hidden"
       style={{ perspective: 800 }}
     >
@@ -54,7 +54,11 @@ const ModelViewer = ({ frameRef, handleMouseMove, handleMouseLeave }) => {
         <Suspense fallback={null}>
           <Model url="/models/boss.glb" />
         </Suspense>
-        <OrbitControls enableZoom={false} />
+        <OrbitControls
+          enableZoom={false}
+          enableRotate={false}   // disable rotation by mouse
+          enablePan={false}      // disable panning
+        />
       </Canvas>
     </div>
   );

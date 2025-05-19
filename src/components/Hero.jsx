@@ -173,11 +173,12 @@ const Hero = () => {
             </h1>
 
             <Button
-              id="watch-trailer"
-              title="hemen oyna"
-              leftIcon={<TiLocationArrow />}
-              containerClass="bg-yellow-300 flex-center gap-1"
-            />
+  id="watch-trailer"
+  title="hemen oyna"
+  leftIcon={<TiLocationArrow />}
+  containerClass="bg-yellow-300 flex-center gap-1"
+  onClick={() => window.open("https://www.suratbet234.com/tr/", "_blank")}
+/>
           </div>
         </div>
       </div>
