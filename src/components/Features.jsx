@@ -63,6 +63,7 @@ export const BentoCard = ({ src, title, description, isComingSoon }) => {
     const [videoError, setVideoError] = useState(false);
     const hoverButtonRef = useRef(null);
     const videoRef = useRef(null);
+    const cardRef = useRef(null);
 
     const handleMouseMove = (event) => {
         if (!hoverButtonRef.current) return;
@@ -97,11 +98,35 @@ export const BentoCard = ({ src, title, description, isComingSoon }) => {
         setVideoError(true);
     };
 
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        autoPlay();
+                    } else {
+                        pause();
+                    }
+                });
+            },
+            { threshold: 0.1 } // Trigger when 10% of the card is visible
+        );
+
+        if (cardRef.current) {
+            observer.observe(cardRef.current);
+        }
+
+        return () => {
+            if (cardRef.current) {
+                observer.unobserve(cardRef.current);
+            }
+        };
+    }, []);
+
     return (
         <div
+            ref={cardRef}
             className="relative size-full overflow-hidden rounded-md"
-            onMouseEnter={autoPlay}
-            onMouseLeave={pause}
         >
             {videoError ? (
                 <div className="absolute left-0 top-0 size-full bg-gray-500 flex items-center justify-center text-white">
@@ -115,7 +140,6 @@ export const BentoCard = ({ src, title, description, isComingSoon }) => {
                     muted
                     playsInline
                     webkit-playsinline="true"
-                    autoplay
                     preload="auto"
                     className="absolute left-0 top-0 size-full object-cover object-center pointer-events-none"
                     style={{ borderRadius: 'inherit' }}
