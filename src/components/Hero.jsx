@@ -81,15 +81,6 @@ const Hero = () => {
               nextVdRef.current.play().catch(console.error);
             }
           },
-          onComplete: () => {
-            // Swap video sources after animation
-            if (backgroundVdRef.current && nextVdRef.current) {
-              backgroundVdRef.current.src = getVideoSrc(currentIndex);
-              backgroundVdRef.current.load();
-              backgroundVdRef.current.play().catch(console.error);
-              gsap.set("#next-video", { visibility: "hidden", scale: 0.5, width: "256px", height: "256px" });
-            }
-          },
         })
         .from("#current-video", {
           scale: 0,
@@ -251,9 +242,9 @@ const Hero = () => {
           </div>
         </div>
       </div>
-      <h1 className="special-font hero-heading absolute bottom-5 right-5 text-black hidden md:block">
-        G<b>A</b>MING
-      </h1>
+       <h1 className="special-font hero-heading absolute bottom-5 right-5 text-black hidden md:block">
+                G<b>A</b>MING
+        </h1>
     </div>
   );
 };
