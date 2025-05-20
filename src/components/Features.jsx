@@ -115,6 +115,8 @@ export const BentoCard = ({ src, title, description, isComingSoon }) => {
                     muted
                     playsInline
                     webkit-playsinline="true"
+                    autoplay
+                    preload="auto"
                     className="absolute left-0 top-0 size-full object-cover object-center pointer-events-none"
                     style={{ borderRadius: 'inherit' }}
                     onError={handleVideoError}
