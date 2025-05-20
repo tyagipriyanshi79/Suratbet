@@ -9,7 +9,7 @@ const ImageClipBox = ({ src, clipClass }) => (
 
 const Contact = () => {
   return (
-    <div id="contact" className="my-20 min-h-96 w-screen  px-10">
+    <div id="contact" className="my-20 min-h-96 w-screen px-10">
       <div className="relative rounded-lg bg-black py-24 text-blue-50 sm:overflow-hidden">
         <div className="absolute -left-20 top-0 hidden h-full w-72 overflow-hidden sm:block lg:left-20 lg:w-96">
           <ImageClipBox
@@ -22,8 +22,7 @@ const Contact = () => {
           />
         </div>
 
-        <div className="absolute -top-40 left-20 w-60 sm:top-1/2 md:left-auto md:right-10 lg:top-20 lg:w-80 max-sm:right-0 max-sm:scale-[60%]">
-          
+        <div className="absolute -top-40 left-20 w-60 md:left-auto md:right-10 lg:top-20 lg:w-80 max-sm:top-1/2 max-sm:right-0 max-sm:scale-[60%] max-sm:-translate-y-48">
           <ImageClipBox
             src="/img/swordman.webp"
             clipClass="sword-man-clip-path md:scale-125"
@@ -41,10 +40,10 @@ const Contact = () => {
           />
 
           <Button
-  title="GÜNCEL SİTE"
-  containerClass="mt-10 cursor-pointer"
-  onClick={() => window.open("https://www.suratbet234.com/tr/", "_blank")}
-/>
+            title="GÜNCEL SİTE"
+            containerClass="mt-10 cursor-pointer"
+            onClick={() => window.open("https://www.suratbet234.com/tr/", "_blank")}
+          />
         </div>
       </div>
     </div>

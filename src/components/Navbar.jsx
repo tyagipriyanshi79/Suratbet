@@ -78,13 +78,22 @@ const Navbar = () => {
       >
         <header className="absolute top-1/2 w-full -translate-y-1/2">
           <nav className="flex size-full items-center justify-between p-4">
-            <div className="flex items-center gap-7">
+            <div className="flex items-center gap-3">
               <img src="/img/logo.png" alt="logo" className="w-10" />
               <Button
                 id="product-button"
                 title="Giris"
                 rightIcon={<TiLocationArrow />}
                 containerClass="bg-blue-50 md:flex hidden items-center justify-center gap-1"
+                onClick={() =>
+                  window.open("https://www.suratbet234.com/tr/", "_blank")
+                }
+              />
+              <Button
+                id="mobile-product-button"
+                title="Giris"
+                rightIcon={<TiLocationArrow />}
+                containerClass="bg-blue-50 md:hidden flex items-center justify-center gap-1 text-sm px-3 py-1"
                 onClick={() =>
                   window.open("https://www.suratbet234.com/tr/", "_blank")
                 }
