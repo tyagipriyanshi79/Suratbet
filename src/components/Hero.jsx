@@ -163,7 +163,7 @@ const Hero = () => {
                   onError={handleVideoError}
                   onCanPlay={(e) => e.target.play().catch(console.error)}
                   disablePictureInPicture
-                  poster="/img/stones.webp"
+                  //poster="/img/stones.webp"
                 >
                   <source
                     src={getVideoSrc((currentIndex % totalVideos) + 1)}
@@ -187,7 +187,7 @@ const Hero = () => {
             onError={handleVideoError}
             onCanPlay={(e) => e.target.play().catch(console.error)}
             disablePictureInPicture
-            poster="/img/stones.webp"
+            //poster="/img/stones.webp"
           >
             <source
               src={getVideoSrc(currentIndex)}
