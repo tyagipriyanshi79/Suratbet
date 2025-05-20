@@ -22,7 +22,7 @@ const Contact = () => {
           />
         </div>
 
-        <div className="absolute -top-40 left-20 w-60 md:left-auto md:right-10 lg:top-20 lg:w-80 max-sm:top-1/2 max-sm:right-0 max-sm:scale-[60%] max-sm:-translate-y-48">
+        <div className="absolute -top-40 left-20 w-60 md:left-auto md:right-10 lg:top-20 lg:w-80 max-sm:top-1/4 max-sm:right-0 max-sm:scale-[80%] max-sm:-translate-y-48">
           <ImageClipBox
             src="/img/swordman.webp"
             clipClass="sword-man-clip-path md:scale-125"
@@ -44,10 +44,10 @@ const Contact = () => {
           />
 
           {/* Second image for mobile view */}
-          <div className="mt-6 block sm:hidden">
+          <div className="mt-10 block sm:hidden">
             <ImageClipBox
-              src="/img/contact-2.webp"
-              clipClass="contact-clip-path-2 max-sm:w-60 max-sm:mx-auto"
+              src="/img/contact.webp"
+              clipClass="contact-clip-path-2 max-sm:w-80 max-sm:mx-auto"
             />
           </div>
         </div>

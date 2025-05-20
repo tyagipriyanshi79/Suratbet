@@ -24,35 +24,41 @@ const Hero = () => {
   const getVideoSrc = (index) => `videos/hero-${index}.mp4`;
 
   const handleVideoLoad = () => {
-    setLoadedVideos((prev) => prev + 1);
+    setLoadedVideos((prev) => {
+      const newCount = prev + 1;
+      if (newCount >= totalVideos - 1) {
+        setLoading(false);
+      }
+      return newCount;
+    });
   };
 
   const handleVideoError = (e) => {
-    console.error("Video failed to load", e);
-    // Do not increment loadedVideos on error to keep loading screen visible
-    // Instead, attempt to reload the video after a delay
+    console.error("Video failed to load:", e);
+    // Retry loading after a delay
     setTimeout(() => {
       if (e.target) {
-        e.target.load(); // Retry loading the video
+        e.target.load();
       }
     }, 2000);
   };
 
   useEffect(() => {
-    // Detect older devices based on CPU cores (heuristic for low performance)
+    // Detect low-performance devices
     const isOlderDevice = navigator.hardwareConcurrency
       ? navigator.hardwareConcurrency <= 2
       : false;
     setIsLowPerformance(isOlderDevice);
-
-    if (loadedVideos >= totalVideos - 1) {
-      setLoading(false);
-    }
-  }, [loadedVideos]);
+  }, []);
 
   const handleMiniVdClick = () => {
     setHasClicked(true);
     setCurrentIndex((prev) => (prev % totalVideos) + 1);
+    // Reload the next video with the new source
+    if (nextVdRef.current) {
+      nextVdRef.current.load();
+      nextVdRef.current.play().catch((err) => console.error("Play error:", err));
+    }
   };
 
   // Ensure background video plays after loading
@@ -65,33 +71,30 @@ const Hero = () => {
   }, []);
 
   // Animate video on index change
-  useGSAP(() => {
-    const tl = gsap.timeline();
-
-    if (hasClicked) {
-      tl.set("#next-video", { visibility: "visible" })
-        .to("#next-video", {
-          scale: 1,
-          width: "100%",
-          height: "100%",
-          duration: isLowPerformance ? 0.4 : 0.6,
-          ease: "power1.inOut",
-          onStart: () => {
-            if (nextVdRef.current) {
-              nextVdRef.current.play().catch(console.error);
-            }
-          },
-        })
-        .from("#current-video", {
-          scale: 0,
-          duration: isLowPerformance ? 0.4 : 0.6,
-          ease: "power1.inOut",
-        });
-    }
-  }, {
-    dependencies: [currentIndex],
-    revertOnUpdate: true,
-  });
+  useGSAP(
+    () => {
+      if (hasClicked && nextVdRef.current) {
+        const tl = gsap.timeline();
+        tl.set("#next-video", { visibility: "visible" })
+          .to("#next-video", {
+            scale: 1,
+            width: "100%",
+            height: "100%",
+            duration: isLowPerformance ? 0.4 : 0.6,
+            ease: "power1.inOut",
+            onStart: () => {
+              nextVdRef.current.play().catch((err) => console.error("Play error:", err));
+            },
+          })
+          .from("#current-video", {
+            scale: 0,
+            duration: isLowPerformance ? 0.4 : 0.6,
+            ease: "power1.inOut",
+          });
+      }
+    },
+    { dependencies: [currentIndex, hasClicked], revertOnUpdate: true }
+  );
 
   // Scroll animation for video frame
   useGSAP(() => {
@@ -130,12 +133,12 @@ const Hero = () => {
       {/* Main video container */}
       <div
         id="video-frame"
-        className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75 will-change-transform"
+        className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-800 will-change-transform"
       >
         {/* Fallback image */}
         {loading && (
           <img
-            src="/img/stones.webp"
+            src="/img/contact-2.webp"
             alt="fallback background"
             className="absolute left-0 top-0 size-full object-cover z-0"
             decoding="async"
@@ -152,7 +155,6 @@ const Hero = () => {
                 className="origin-center scale-50 opacity-0 transition-all duration-300 ease-in hover:scale-100 hover:opacity-100"
               >
                 <video
-                  src={getVideoSrc((currentIndex % totalVideos) + 1)}
                   loop
                   muted
                   playsInline
@@ -163,11 +165,11 @@ const Hero = () => {
                   onError={handleVideoError}
                   onCanPlay={(e) => e.target.play().catch(console.error)}
                   disablePictureInPicture
-                  //poster="/img/stones.webp"
+                  poster="/img/contact-2.webp"
                 >
                   <source
                     src={getVideoSrc((currentIndex % totalVideos) + 1)}
-                    type="video/mp4; codecs=avc1.42E01E,mp4a.40.2"
+                    type="video/mp4"
                   />
                 </video>
               </div>
@@ -187,12 +189,9 @@ const Hero = () => {
             onError={handleVideoError}
             onCanPlay={(e) => e.target.play().catch(console.error)}
             disablePictureInPicture
-            //poster="/img/stones.webp"
+            poster="/img/contact-2.webp"
           >
-            <source
-              src={getVideoSrc(currentIndex)}
-              type="video/mp4; codecs=avc1.42E01E,mp4a.40.2"
-            />
+            <source src={getVideoSrc(currentIndex)} type="video/mp4" />
           </video>
 
           {/* Background looping video */}
@@ -208,13 +207,11 @@ const Hero = () => {
             onError={handleVideoError}
             onCanPlay={(e) => e.target.play().catch(console.error)}
             disablePictureInPicture
-            //poster="/img/stones.webp"
+            poster="/img/contact-2.webp"
           >
             <source
-              src={getVideoSrc(
-                currentIndex === totalVideos - 1 ? 1 : currentIndex
-              )}
-              type="video/mp4; codecs=avc1.42E01E,mp4a.40.2"
+              src={getVideoSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
+              type="video/mp4"
             />
           </video>
         </div>
@@ -235,16 +232,14 @@ const Hero = () => {
               title="hemen oyna"
               leftIcon={<TiLocationArrow />}
               containerClass="bg-yellow-300 flex-center gap-1 mt-4 md:mt-0"
-              onClick={() =>
-                window.open("https://www.suratbet234.com/tr/", "_blank")
-              }
+              onClick={() => window.open("https://www.suratbet234.com/tr/", "_blank")}
             />
           </div>
         </div>
       </div>
-       <h1 className="special-font hero-heading absolute bottom-5 right-5 text-black hidden md:block">
-                G<b>A</b>MING
-        </h1>
+      <h1 className="special-font hero-heading absolute bottom-5 right-5 text-black hidden md:block">
+        G<b>A</b>MING
+      </h1>
     </div>
   );
 };
