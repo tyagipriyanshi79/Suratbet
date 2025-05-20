@@ -14,6 +14,7 @@ const Hero = () => {
   const [hasClicked, setHasClicked] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadedVideos, setLoadedVideos] = useState(0);
+  const [isLowPerformance, setIsLowPerformance] = useState(false);
 
   const totalVideos = 4;
 
@@ -28,10 +29,22 @@ const Hero = () => {
 
   const handleVideoError = (e) => {
     console.error("Video failed to load", e);
-    setLoadedVideos((prev) => prev + 1);
+    // Do not increment loadedVideos on error to keep loading screen visible
+    // Instead, attempt to reload the video after a delay
+    setTimeout(() => {
+      if (e.target) {
+        e.target.load(); // Retry loading the video
+      }
+    }, 2000);
   };
 
   useEffect(() => {
+    // Detect older devices based on CPU cores (heuristic for low performance)
+    const isOlderDevice = navigator.hardwareConcurrency
+      ? navigator.hardwareConcurrency <= 2
+      : false;
+    setIsLowPerformance(isOlderDevice);
+
     if (loadedVideos >= totalVideos - 1) {
       setLoading(false);
     }
@@ -41,6 +54,15 @@ const Hero = () => {
     setHasClicked(true);
     setCurrentIndex((prev) => (prev % totalVideos) + 1);
   };
+
+  // Ensure background video plays after loading
+  useEffect(() => {
+    if (backgroundVdRef.current) {
+      backgroundVdRef.current.play().catch((err) => {
+        console.error("Background video playback error:", err);
+      });
+    }
+  }, []);
 
   // Animate video on index change
   useGSAP(() => {
@@ -52,8 +74,8 @@ const Hero = () => {
           scale: 1,
           width: "100%",
           height: "100%",
-          duration: 0.6, // Shorter duration for snappier iOS response
-          ease: "power1.inOut", // Smoother easing for iOS
+          duration: isLowPerformance ? 0.4 : 0.6,
+          ease: "power1.inOut",
           onStart: () => {
             if (nextVdRef.current) {
               nextVdRef.current.play().catch(console.error);
@@ -62,7 +84,7 @@ const Hero = () => {
         })
         .from("#current-video", {
           scale: 0,
-          duration: 0.6,
+          duration: isLowPerformance ? 0.4 : 0.6,
           ease: "power1.inOut",
         });
     }
@@ -76,7 +98,7 @@ const Hero = () => {
     gsap.set("#video-frame", {
       clipPath: "polygon(14% 0, 72% 0, 88% 90%, 0 95%)",
       borderRadius: "0% 0% 40% 10%",
-      willChange: "clip-path, border-radius", // Optimize rendering
+      willChange: "clip-path, border-radius",
     });
 
     gsap.from("#video-frame", {
@@ -87,7 +109,7 @@ const Hero = () => {
         trigger: "#video-frame",
         start: "center center",
         end: "bottom center",
-        scrub: 0.1, // Reduced scrub for smoother iOS scrolling
+        scrub: isLowPerformance ? 0.05 : 0.1,
       },
     });
   }, []);
@@ -116,7 +138,7 @@ const Hero = () => {
             src="/img/stones.webp"
             alt="fallback background"
             className="absolute left-0 top-0 size-full object-cover z-0"
-            decoding="async" // Optimize for iOS
+            decoding="async"
             loading="lazy"
           />
         )}
@@ -134,12 +156,14 @@ const Hero = () => {
                   loop
                   muted
                   playsInline
-                  preload="metadata"
+                  preload={isLowPerformance ? "none" : "metadata"}
                   id="current-video"
                   className="size-64 origin-center scale-150 object-cover"
                   onLoadedMetadata={handleVideoLoad}
                   onError={handleVideoError}
+                  onCanPlay={(e) => e.target.play().catch(console.error)}
                   disablePictureInPicture
+                  poster="/img/stones.webp"
                 >
                   <source
                     src={getVideoSrc((currentIndex % totalVideos) + 1)}
@@ -156,12 +180,14 @@ const Hero = () => {
             loop
             muted
             playsInline
-            preload="metadata"
+            preload={isLowPerformance ? "none" : "metadata"}
             id="next-video"
             className="absolute-center invisible absolute z-20 size-64 object-cover will-change-transform"
             onLoadedMetadata={handleVideoLoad}
             onError={handleVideoError}
+            onCanPlay={(e) => e.target.play().catch(console.error)}
             disablePictureInPicture
+            poster="/img/stones.webp"
           >
             <source
               src={getVideoSrc(currentIndex)}
@@ -180,7 +206,9 @@ const Hero = () => {
             className="absolute left-0 top-0 size-full object-cover will-change-transform"
             onLoadedMetadata={handleVideoLoad}
             onError={handleVideoError}
+            onCanPlay={(e) => e.target.play().catch(console.error)}
             disablePictureInPicture
+            poster="/img/stones.webp"
           >
             <source
               src={getVideoSrc(
@@ -194,32 +222,26 @@ const Hero = () => {
         {/* Overlay heading and CTA button */}
         <div className="absolute left-0 top-0 z-40 size-full">
           <div className="mt-24 px-5 sm:px-10">
-            <h1 className="special-font hero-heading text-blue-100">
+            <h1 className="special-font hero-heading text-blue-100 text-5xl md:text-7xl">
               sur<b>a</b>tb<b>e</b>t
+            </h1>
+
+            <h1 className="special-font hero-heading text-blue-75 mt-4 md:absolute md:bottom-5 md:right-5">
+              G<b>A</b>MING
             </h1>
 
             <Button
               id="watch-trailer"
               title="hemen oyna"
               leftIcon={<TiLocationArrow />}
-              containerClass="bg-yellow-300 flex-center gap-1"
+              containerClass="bg-yellow-300 flex-center gap-1 mt-4 md:mt-0"
               onClick={() =>
                 window.open("https://www.suratbet234.com/tr/", "_blank")
               }
             />
           </div>
         </div>
-
-        {/* Bottom right title */}
-        <h1 className="special-font hero-heading absolute bottom-5 right-5 z-40 text-blue-75">
-          G<b>A</b>MING
-        </h1>
       </div>
-
-      {/* Duplicate heading for fallback contrast */}
-      <h1 className="special-font hero-heading absolute bottom-5 right-5 text-black">
-        G<b>A</b>MING
-      </h1>
     </div>
   );
 };
