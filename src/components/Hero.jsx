@@ -242,7 +242,7 @@ const Hero = () => {
           </div>
         </div>
       </div>
-       <h1 className="special-font hero-heading absolute bottom-5 right-5 text-black">
+       <h1 className="special-font hero-heading absolute bottom-5 right-5 text-black hidden md:block">
                 G<b>A</b>MING
         </h1>
     </div>
