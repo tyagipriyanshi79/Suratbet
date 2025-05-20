@@ -5,8 +5,8 @@ import { useGSAP } from '@gsap/react';
 const Glance = () => {
     const [isHovering, setIsHovering] = useState(false);
     const cardRefs = useRef([]);
-    const videoRef = useRef(null); // Ref for the video in Card 1
-    const [videoError, setVideoError] = useState(false); // State for video error handling
+    const videoRef = useRef(null);
+    const [videoError, setVideoError] = useState(false);
 
     const addToRefs = (el) => {
         if (el && !cardRefs.current.includes(el)) {
@@ -31,7 +31,6 @@ const Glance = () => {
                 ease: "power1.out",
             });
 
-            // Animate the video or img inside the card
             const content = currentTarget.querySelector('video, img');
             if (content) {
                 gsap.to(content, {
@@ -84,7 +83,7 @@ const Glance = () => {
             <div className='flex flex-col md:flex-row gap-10'>
                 {/* Left 2 Cards */}
                 <div className='flex flex-col w-full gap-10 items-end mt-28'>
-                    {/* Card 1 */}
+                    {/* Card 1 (Black) */}
                     <div
                         ref={addToRefs}
                         className='flex border border-neutral-700 w-auto rounded-lg max-w-xl'
@@ -121,10 +120,10 @@ const Glance = () => {
                         </div>
                     </div>
 
-                    {/* Card 2 */}
+                    {/* Card 2 (Yellow) */}
                     <div
                         ref={addToRefs}
-                        className="flex flex-col justify-between border border-neutral-700 p-4 md:p-5 bg-yellow-300 rounded-lg w-full max-w-xl mx-auto h-auto md:h-[25rem]"
+                        className="flex flex-col justify-between border border-neutral-700 p-4 md:p-5 bg-yellow-300 rounded-lg w-full max-w-xl h-auto md:h-[25rem]"
                         onMouseMove={handleMouseMove}
                         onMouseEnter={() => setIsHovering(true)}
                         onMouseLeave={() => setIsHovering(false)}
@@ -142,7 +141,7 @@ const Glance = () => {
 
                 {/* Right 2 Cards */}
                 <div className='flex flex-col w-full gap-10 items-start'>
-                    {/* Card 3 */}
+                    {/* Card 3 (Blue) */}
                     <div
                         ref={addToRefs}
                         className='flex flex-col border border-neutral-700 bg-violet-300 rounded-lg'
@@ -164,7 +163,7 @@ const Glance = () => {
                             className='h-auto mx-10'
                             onError={(e) => {
                                 console.error("Error loading logo image");
-                                e.target.src = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="; // Fallback to transparent 1x1 pixel
+                                e.target.src = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
                             }}
                         />
                     </div>

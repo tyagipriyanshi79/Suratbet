@@ -208,7 +208,7 @@ const Hero = () => {
             onError={handleVideoError}
             onCanPlay={(e) => e.target.play().catch(console.error)}
             disablePictureInPicture
-            poster="/img/stones.webp"
+            //poster="/img/stones.webp"
           >
             <source
               src={getVideoSrc(
@@ -222,11 +222,11 @@ const Hero = () => {
         {/* Overlay heading and CTA button */}
         <div className="absolute left-0 top-0 z-40 size-full">
           <div className="mt-24 px-5 sm:px-10">
-            <h1 className="special-font hero-heading text-blue-100 text-5xl md:text-7xl">
+            <h1 className="special-font hero-heading text-blue-100 text-12xl sm:text-12xl md:text-12xl">
               sur<b>a</b>tb<b>e</b>t
             </h1>
 
-            <h1 className="special-font hero-heading text-blue-75 mt-4 md:absolute md:bottom-5 md:right-5">
+            <h1 className="special-font hero-heading text-blue-100 mt-2 md:absolute md:bottom-5 md:right-5 text-12xl sm:text-12xl md:text-12xl">
               G<b>A</b>MING
             </h1>
 
@@ -242,6 +242,9 @@ const Hero = () => {
           </div>
         </div>
       </div>
+       <h1 className="special-font hero-heading absolute bottom-5 right-5 text-black">
+                G<b>A</b>MING
+        </h1>
     </div>
   );
 };
