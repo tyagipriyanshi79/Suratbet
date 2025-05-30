@@ -22,7 +22,7 @@ const Hero = () => {
   const nextVdRef = useRef(null);
   const backgroundVdRef = useRef(null);
 
-  const getVideoSrc = (index) => `/videos/hero-${index}.mp4`; // Ensure leading slash for public folder
+  const getVideoSrc = (index) => `videos/hero-${index}.mp4`; // Ensure leading slash for public folder
 
   const handleVideoLoad = (e) => {
     console.log(`Video loaded: ${e.target.src}`);
@@ -157,7 +157,7 @@ const Hero = () => {
         {/* Fallback image */}
         {(loading || videoError) && (
           <img
-            src="/img/contact-2.webp"
+            src="/img/about.webp"
             alt="fallback background"
             className="absolute left-0 top-0 size-full object-cover z-0"
             decoding="async"
@@ -184,12 +184,10 @@ const Hero = () => {
                   onError={handleVideoError}
                   onCanPlay={(e) => e.target.play().catch(console.error)}
                   disablePictureInPicture
-                  poster="/img/contact-2.webp"
+                  poster="/img/about.webp"
+                  src={getVideoSrc((currentIndex % totalVideos) + 1)}
                 >
-                  <source
-                    src={getVideoSrc((currentIndex % totalVideos) + 1)}
-                    type="video/mp4"
-                  />
+                
                 </video>
               </div>
             </VideoPreview>
@@ -208,9 +206,10 @@ const Hero = () => {
             onError={handleVideoError}
             onCanPlay={(e) => e.target.play().catch(console.error)}
             disablePictureInPicture
-            poster="/img/contact-2.webp"
+            poster="/img/about.webp"
+            src={getVideoSrc(currentIndex)}
           >
-            <source src={getVideoSrc(currentIndex)} type="video/mp4" />
+            
           </video>
 
           {/* Background looping video */}
@@ -225,7 +224,7 @@ const Hero = () => {
             onError={handleVideoError}
             onCanPlay={(e) => e.target.play().catch(console.error)}
             disablePictureInPicture
-            poster="/img/contact-2.webp"
+            poster="/img/about.webp"
           >
             <source
               src={getVideoSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
