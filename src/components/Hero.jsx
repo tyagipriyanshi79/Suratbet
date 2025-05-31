@@ -157,7 +157,7 @@ const Hero = () => {
         {/* Fallback image */}
         {(loading || videoError) && (
           <img
-            src="/img/about.webp"
+            src="/img/hero-1.png"
             alt="fallback background"
             className="absolute left-0 top-0 size-full object-cover z-0"
             decoding="async"
@@ -184,7 +184,7 @@ const Hero = () => {
                   onError={handleVideoError}
                   onCanPlay={(e) => e.target.play().catch(console.error)}
                   disablePictureInPicture
-                  poster="/img/about.webp"
+                  poster="/img/hero-2.png"
                   src={getVideoSrc((currentIndex % totalVideos) + 1)}
                 >
                 
@@ -206,7 +206,7 @@ const Hero = () => {
             onError={handleVideoError}
             onCanPlay={(e) => e.target.play().catch(console.error)}
             disablePictureInPicture
-            poster="/img/about.webp"
+            poster="/img/hero-3.png"
             src={getVideoSrc(currentIndex)}
           >
             
@@ -224,7 +224,7 @@ const Hero = () => {
             onError={handleVideoError}
             onCanPlay={(e) => e.target.play().catch(console.error)}
             disablePictureInPicture
-            poster="/img/about.webp"
+            poster="/img/hero-4.png"
           >
             <source
               src={getVideoSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
