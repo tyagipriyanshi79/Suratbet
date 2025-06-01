@@ -23,6 +23,8 @@ const Hero = () => {
   const backgroundVdRef = useRef(null);
 
   const getVideoSrc = (index) => `videos/hero-${index}.mp4`; // Ensure leading slash for public folder
+  const getPosterSrc = (index) => `/img/hero-${index}.png`;
+
 
   const handleVideoLoad = (e) => {
     console.log(`Video loaded: ${e.target.src}`);
@@ -157,7 +159,7 @@ const Hero = () => {
         {/* Fallback image */}
         {(loading || videoError) && (
           <img
-            src="/img/hero-1.png"
+            src={getPosterSrc(currentIndex)}
             alt="fallback background"
             className="absolute left-0 top-0 size-full object-cover z-0"
             decoding="async"
@@ -184,7 +186,7 @@ const Hero = () => {
                   onError={handleVideoError}
                   onCanPlay={(e) => e.target.play().catch(console.error)}
                   disablePictureInPicture
-                  poster="/img/hero-2.png"
+                  poster={getPosterSrc((currentIndex % totalVideos) + 1)}
                   src={getVideoSrc((currentIndex % totalVideos) + 1)}
                 >
                 
@@ -206,7 +208,7 @@ const Hero = () => {
             onError={handleVideoError}
             onCanPlay={(e) => e.target.play().catch(console.error)}
             disablePictureInPicture
-            poster="/img/hero-3.png"
+            poster={getPosterSrc(currentIndex)}
             src={getVideoSrc(currentIndex)}
           >
             
@@ -224,7 +226,7 @@ const Hero = () => {
             onError={handleVideoError}
             onCanPlay={(e) => e.target.play().catch(console.error)}
             disablePictureInPicture
-            poster="/img/hero-4.png"
+            poster={getPosterSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
           >
             <source
               src={getVideoSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
