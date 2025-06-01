@@ -3,50 +3,8 @@ import { useRef } from "react";
 
 import Button from "./Button";
 import AnimatedTitle from "./AnimatedTitle";
-import ModelViewer from "./ModelViewer";
 
 const Story = () => {
-  const frameRef = useRef(null);
-
-  const handleMouseMove = (e) => {
-    const { clientX, clientY } = e;
-    const element = frameRef.current;
-
-    if (!element) return;
-
-    const rect = element.getBoundingClientRect();
-    const xPos = clientX - rect.left;
-    const yPos = clientY - rect.top;
-
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-
-    const rotateX = ((yPos - centerY) / centerY) * -10;
-    const rotateY = ((xPos - centerX) / centerX) * 10;
-
-    gsap.to(element, {
-      duration: 0.3,
-      rotateX,
-      rotateY,
-      transformPerspective: 500,
-      ease: "power1.inOut",
-    });
-  };
-
-  const handleMouseLeave = () => {
-    const element = frameRef.current;
-
-    if (
-      element) {
-      gsap.to(element, {
-        duration: 0.3,
-        rotateX: 0,
-        rotateY: 0,
-        ease: "power1.inOut",
-      });
-    }
-  };
-
   return (
     <div id="story" className="min-h-screen w-screen bg-black text-blue-50">
       <div className="flex size-full flex-col items-center py-6 sm:py-8">
@@ -56,13 +14,16 @@ const Story = () => {
           containerClass="mt-5 pointer-events-none mix-blend-difference relative z-10"
         />
 
-        {/* 3D Model Viewer */}
-        <div className="story-img-container story-img-container-tight relative w-full">
+        {/* Video Player */}
+        <div className="story-img-container story-img-container-tight relative w-full mb-10 sm:mb-12">
           <div className="flex justify-center w-full">
-            <ModelViewer
-              frameRef={frameRef}
-              handleMouseMove={handleMouseMove}
-              handleMouseLeave={handleMouseLeave}
+            <video
+              className="w-full max-w-[240px] sm:max-w-xl h-auto object-cover"
+              src="videos/sonic.mp4" // Replace with your video file path
+              autoPlay
+              loop
+              muted
+              playsInline
             />
           </div>
 
@@ -95,7 +56,7 @@ const Story = () => {
         </div>
 
         {/* Paragraphs Section */}
-        <div className="flex w-full justify-center mt-4 sm:mt-6">
+        <div className="flex w-full justify-center mt-4 sm:mt-6 pt-6 sm:pt-0 relative z-10">
           <div className="flex w-full max-w-6xl flex-col px-4 sm:px-6 md:flex-row md:items-start md:justify-between md:gap-x-16">
             {/* Left Column */}
             <div className="w-full md:w-1/2 mt-4 sm:mt-6">
@@ -113,7 +74,7 @@ const Story = () => {
             </div>
 
             {/* Right Column */}
-            <div className="w-full md:w-1/2 mt g-4 sm:mt-6">
+            <div className="w-full md:w-1/2 mt-4 sm:mt-6">
               <p className="text-left font-circular-web text-violet-50">
                 <strong>Sunduğumuz Ayrıcalıklar</strong>
                 <br />
