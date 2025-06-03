@@ -16,7 +16,7 @@ const Hero = () => {
   const [loadedVideos, setLoadedVideos] = useState(0);
   const [isLowPerformance, setIsLowPerformance] = useState(false);
   const [videoError, setVideoError] = useState(false);
-  const [isVideoReady, setIsVideoReady] = useState(false); // New state to track video readiness
+  const [isVideoReady, setIsVideoReady] = useState({ current: false, next: false, background: false }); // Track readiness for each video
 
   const totalVideos = 4;
 
@@ -26,8 +26,8 @@ const Hero = () => {
   const getVideoSrc = (index) => `videos/hero-${index}.mp4`;
   const getPosterSrc = (index) => `/img/hero-${index}.png`;
 
-  const handleVideoLoad = (e) => {
-    console.log(`Video loaded: ${e.target.src}`);
+  const handleVideoLoad = (e, videoType) => {
+    console.log(`Video loaded (${videoType}): ${e.target.src}`);
     setLoadedVideos((prev) => {
       const newCount = prev + 1;
       if (newCount >= totalVideos - 1) {
@@ -35,21 +35,17 @@ const Hero = () => {
       }
       return newCount;
     });
+    setIsVideoReady((prev) => ({ ...prev, [videoType]: true }));
   };
 
-  const handleVideoError = (e) => {
-    console.error(`Video failed to load: ${e.target.src}`);
+  const handleVideoError = (e, videoType) => {
+    console.error(`Video failed to load (${videoType}): ${e.target.src}`);
     setVideoError(true);
     setTimeout(() => {
       if (e.target && !videoError) {
         e.target.load();
       }
     }, 2000);
-  };
-
-  const handleVideoReady = (e) => {
-    setIsVideoReady(true); // Mark video as ready when fully buffered
-    e.target.play().catch((err) => console.error("Video play error:", err));
   };
 
   useEffect(() => {
@@ -71,7 +67,7 @@ const Hero = () => {
 
   const handleMiniVdClick = () => {
     setHasClicked(true);
-    setIsVideoReady(false); // Reset video readiness on click
+    setIsVideoReady({ current: false, next: false, background: false }); // Reset readiness
     setCurrentIndex((prev) => (prev % totalVideos) + 1);
     if (nextVdRef.current) {
       nextVdRef.current.load();
@@ -85,7 +81,7 @@ const Hero = () => {
 
   useEffect(() => {
     if (backgroundVdRef.current) {
-      setIsVideoReady(false); // Reset readiness when changing video
+      setIsVideoReady((prev) => ({ ...prev, background: false }));
       backgroundVdRef.current.load();
       backgroundVdRef.current.play().catch((err) => console.error("Background video playback error:", err));
     }
@@ -154,18 +150,18 @@ const Hero = () => {
         id="video-frame"
         className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-800 will-change-transform"
       >
-        {/* Fallback image - visible until video is ready */}
-        <img
-          src={getPosterSrc(currentIndex)}
-          alt="fallback background"
-          className={`absolute left-0 top-0 size-full object-cover z-5 transition-opacity duration-300 ${
-            isVideoReady && !loading && !videoError ? "opacity-0" : "opacity-100"
-          }`}
-          decoding="async"
-          loading="lazy"
-        />
-
         <div>
+          {/* Fallback image for current video */}
+          <img
+            src={getPosterSrc((currentIndex % totalVideos) + 1)}
+            alt="current video fallback"
+            className={`absolute left-0 top-0 size-full object-cover z-5 transition-opacity duration-300 ${
+              isVideoReady.current && !loading && !videoError ? "opacity-0" : "opacity-100"
+            }`}
+            decoding="async"
+            loading="lazy"
+          />
+
           <div className="mask-clip-path absolute-center absolute z-50 size-56 cursor-pointer overflow-hidden rounded-lg will-change-transform">
             <VideoPreview>
               <div
@@ -178,10 +174,12 @@ const Hero = () => {
                   playsInline
                   preload={isLowPerformance ? "metadata" : "auto"}
                   id="current-video"
-                  className="size-64 origin-center scale-150 object-cover"
-                  onLoadedMetadata={handleVideoLoad}
-                  onError={handleVideoError}
-                  onCanPlayThrough={handleVideoReady} // Changed to onCanPlayThrough
+                  className={`size-64 origin-center scale-150 object-cover ${
+                    isVideoReady.current ? "opacity-100" : "opacity-0"
+                  }`}
+                  onLoadedMetadata={(e) => handleVideoLoad(e, "current")}
+                  onError={(e) => handleVideoError(e, "current")}
+                  onCanPlayThrough={(e) => handleVideoLoad(e, "current")}
                   disablePictureInPicture
                   poster={getPosterSrc((currentIndex % totalVideos) + 1)}
                   src={getVideoSrc((currentIndex % totalVideos) + 1)}
@@ -190,6 +188,17 @@ const Hero = () => {
             </VideoPreview>
           </div>
 
+          {/* Fallback image for next video */}
+          <img
+            src={getPosterSrc(currentIndex)}
+            alt="next video fallback"
+            className={`absolute left-0 top-0 size-full object-cover z-5 transition-opacity duration-300 ${
+              isVideoReady.next && !loading && !videoError ? "opacity-0" : "opacity-100"
+            }`}
+            decoding="async"
+            loading="lazy"
+          />
+
           <video
             ref={nextVdRef}
             loop
@@ -197,13 +206,26 @@ const Hero = () => {
             playsInline
             preload={isLowPerformance ? "metadata" : "auto"}
             id="next-video"
-            className="absolute-center invisible absolute z-20 size-64 object-cover will-change-transform"
-            onLoadedMetadata={handleVideoLoad}
-            onError={handleVideoError}
-            onCanPlayThrough={handleVideoReady} // Changed to onCanPlayThrough
+            className={`absolute-center absolute z-20 size-64 object-cover will-change-transform ${
+              isVideoReady.next ? "visible opacity-100" : "invisible opacity-0"
+            }`}
+            onLoadedMetadata={(e) => handleVideoLoad(e, "next")}
+            onError={(e) => handleVideoError(e, "next")}
+            onCanPlayThrough={(e) => handleVideoLoad(e, "next")}
             disablePictureInPicture
             poster={getPosterSrc(currentIndex)}
             src={getVideoSrc(currentIndex)}
+          />
+
+          {/* Fallback image for background video */}
+          <img
+            src={getPosterSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
+            alt="background video fallback"
+            className={`absolute left-0 top-0 size-full object-cover z-5 transition-opacity duration-300 ${
+              isVideoReady.background && !loading && !videoError ? "opacity-0" : "opacity-100"
+            }`}
+            decoding="async"
+            loading="lazy"
           />
 
           <video
@@ -212,10 +234,12 @@ const Hero = () => {
             muted
             playsInline
             preload="auto"
-            className="absolute left-0 top-0 size-full object-cover will-change-transform"
-            onLoadedMetadata={handleVideoLoad}
-            onError={handleVideoError}
-            onCanPlayThrough={handleVideoReady} // Changed to onCanPlayThrough
+            className={`absolute left-0 top-0 size-full object-cover will-change-transform ${
+              isVideoReady.background ? "opacity-100" : "opacity-0"
+            }`}
+            onLoadedMetadata={(e) => handleVideoLoad(e, "background")}
+            onError={(e) => handleVideoError(e, "background")}
+            onCanPlayThrough={(e) => handleVideoLoad(e, "background")}
             disablePictureInPicture
             poster={getPosterSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
           >
