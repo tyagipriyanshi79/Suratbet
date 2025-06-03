@@ -16,10 +16,11 @@ const Hero = () => {
   const [loadedVideos, setLoadedVideos] = useState(0);
   const [isLowPerformance, setIsLowPerformance] = useState(false);
   const [videoError, setVideoError] = useState(false);
-  const [isVideoReady, setIsVideoReady] = useState({ current: false, next: false, background: false }); // Track readiness for each video
+  const [isVideoReady, setIsVideoReady] = useState({ current: false, next: false, background: false });
 
   const totalVideos = 4;
 
+  const currentVdRef = useRef(null); // Added ref for current-video
   const nextVdRef = useRef(null);
   const backgroundVdRef = useRef(null);
 
@@ -67,8 +68,12 @@ const Hero = () => {
 
   const handleMiniVdClick = () => {
     setHasClicked(true);
-    setIsVideoReady({ current: false, next: false, background: false }); // Reset readiness
+    setIsVideoReady({ current: false, next: false, background: false });
     setCurrentIndex((prev) => (prev % totalVideos) + 1);
+    if (currentVdRef.current) {
+      currentVdRef.current.load();
+      currentVdRef.current.play().catch((err) => console.error("Current video play error:", err));
+    }
     if (nextVdRef.current) {
       nextVdRef.current.load();
       nextVdRef.current.play().catch((err) => console.error("Next video play error:", err));
@@ -84,6 +89,11 @@ const Hero = () => {
       setIsVideoReady((prev) => ({ ...prev, background: false }));
       backgroundVdRef.current.load();
       backgroundVdRef.current.play().catch((err) => console.error("Background video playback error:", err));
+    }
+    if (currentVdRef.current) {
+      setIsVideoReady((prev) => ({ ...prev, current: false }));
+      currentVdRef.current.load();
+      currentVdRef.current.play().catch((err) => console.error("Current video playback error:", err));
     }
   }, [currentIndex]);
 
@@ -151,7 +161,6 @@ const Hero = () => {
         className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-800 will-change-transform"
       >
         <div>
-          {/* Fallback image for current video */}
           <img
             src={getPosterSrc((currentIndex % totalVideos) + 1)}
             alt="current video fallback"
@@ -169,17 +178,20 @@ const Hero = () => {
                 className="origin-center scale-50 opacity-0 transition-all duration-300 ease-in hover:scale-100 hover:opacity-100"
               >
                 <video
+                  ref={currentVdRef}
                   loop
                   muted
                   playsInline
-                  preload={isLowPerformance ? "metadata" : "auto"}
+                  preload="auto"
                   id="current-video"
                   className={`size-64 origin-center scale-150 object-cover ${
                     isVideoReady.current ? "opacity-100" : "opacity-0"
                   }`}
-                  onLoadedMetadata={(e) => handleVideoLoad(e, "current")}
+                  onLoadedMetadata={(e) => {
+                    setIsVideoReady((prev) => ({ ...prev, current: true }));
+                    e.target.play().catch((err) => console.error("Current video play error:", err));
+                  }}
                   onError={(e) => handleVideoError(e, "current")}
-                  onCanPlayThrough={(e) => handleVideoLoad(e, "current")}
                   disablePictureInPicture
                   poster={getPosterSrc((currentIndex % totalVideos) + 1)}
                   src={getVideoSrc((currentIndex % totalVideos) + 1)}
@@ -188,7 +200,6 @@ const Hero = () => {
             </VideoPreview>
           </div>
 
-          {/* Fallback image for next video */}
           <img
             src={getPosterSrc(currentIndex)}
             alt="next video fallback"
@@ -217,7 +228,6 @@ const Hero = () => {
             src={getVideoSrc(currentIndex)}
           />
 
-          {/* Fallback image for background video */}
           <img
             src={getPosterSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
             alt="background video fallback"
