@@ -16,18 +16,19 @@ const Hero = () => {
   const [loadedVideos, setLoadedVideos] = useState(0);
   const [isLowPerformance, setIsLowPerformance] = useState(false);
   const [videoError, setVideoError] = useState(false);
+  const [isVideoReady, setIsVideoReady] = useState({ current: false, next: false, background: false });
 
   const totalVideos = 4;
 
+  const currentVdRef = useRef(null);
   const nextVdRef = useRef(null);
   const backgroundVdRef = useRef(null);
 
-  const getVideoSrc = (index) => `videos/hero-${index}.mp4`; // Ensure leading slash for public folder
+  const getVideoSrc = (index) => `videos/hero-${index}.mp4`;
   const getPosterSrc = (index) => `/img/hero-${index}.png`;
 
-
-  const handleVideoLoad = (e) => {
-    console.log(`Video loaded: ${e.target.src}`);
+  const handleVideoLoad = (e, videoType) => {
+    console.log(`Video loaded (${videoType}): ${e.target.src}`);
     setLoadedVideos((prev) => {
       const newCount = prev + 1;
       if (newCount >= totalVideos - 1) {
@@ -35,12 +36,12 @@ const Hero = () => {
       }
       return newCount;
     });
+    setIsVideoReady((prev) => ({ ...prev, [videoType]: true }));
   };
 
-  const handleVideoError = (e) => {
-    console.error(`Video failed to load: ${e.target.src}`);
+  const handleVideoError = (e, videoType) => {
+    console.error(`Video failed to load (${videoType}): ${e.target.src}`);
     setVideoError(true);
-    // Limit retries to avoid infinite loops on iOS
     setTimeout(() => {
       if (e.target && !videoError) {
         e.target.load();
@@ -49,47 +50,59 @@ const Hero = () => {
   };
 
   useEffect(() => {
-    // Detect low-performance devices
     const isOlderDevice = navigator.hardwareConcurrency
       ? navigator.hardwareConcurrency <= 2
       : false;
     setIsLowPerformance(isOlderDevice);
 
-    // Fallback: hide loading screen after timeout
     const timeout = setTimeout(() => {
       if (loading) {
         console.warn("Video loading timed out, hiding loading screen");
         setLoading(false);
         setVideoError(true);
       }
-    }, 8000); // Reduced to 8s for faster fallback on iOS
+    }, 8000);
 
     return () => clearTimeout(timeout);
   }, [loading]);
 
   const handleMiniVdClick = () => {
     setHasClicked(true);
+    setIsVideoReady({ current: false, next: false, background: false });
     setCurrentIndex((prev) => (prev % totalVideos) + 1);
-    // Reload videos for iOS compatibility
-    if (nextVdRef.current) {
-      nextVdRef.current.load();
-      nextVdRef.current.play().catch((err) => console.error("Next video play error:", err));
-    }
-    if (backgroundVdRef.current) {
-      backgroundVdRef.current.load();
-      backgroundVdRef.current.play().catch((err) => console.error("Background video play error:", err));
-    }
+    setTimeout(() => {
+      if (currentVdRef.current) {
+        currentVdRef.current.load();
+        currentVdRef.current.play().catch((err) => console.error("Current video play error:", err));
+      }
+      if (nextVdRef.current) {
+        nextVdRef.current.load();
+        nextVdRef.current.play().catch((err) => console.error("Next video play error:", err));
+      }
+      if (backgroundVdRef.current) {
+        backgroundVdRef.current.load();
+        backgroundVdRef.current.play().catch((err) => console.error("Background video play error:", err));
+      }
+    }, 100);
   };
 
-  // Ensure background video updates on index change
   useEffect(() => {
     if (backgroundVdRef.current) {
-      backgroundVdRef.current.load();
-      backgroundVdRef.current.play().catch((err) => console.error("Background video playback error:", err));
+      setIsVideoReady((prev) => ({ ...prev, background: false }));
+      setTimeout(() => {
+        backgroundVdRef.current.load();
+        backgroundVdRef.current.play().catch((err) => console.error("Background video playback error:", err));
+      }, 100);
+    }
+    if (currentVdRef.current) {
+      setIsVideoReady((prev) => ({ ...prev, current: false }));
+      setTimeout(() => {
+        currentVdRef.current.load();
+        currentVdRef.current.play().catch((err) => console.error("Current video playback error:", err));
+      }, 100);
     }
   }, [currentIndex]);
 
-  // Animate video on index change
   useGSAP(
     () => {
       if (hasClicked && nextVdRef.current) {
@@ -117,7 +130,6 @@ const Hero = () => {
     { dependencies: [currentIndex, hasClicked], revertOnUpdate: true }
   );
 
-  // Scroll animation for video frame
   useGSAP(() => {
     gsap.set("#video-frame", {
       clipPath: "polygon(14% 0, 72% 0, 88% 90%, 0 95%)",
@@ -140,35 +152,21 @@ const Hero = () => {
 
   return (
     <div id="hero" className="relative h-dvh w-screen overflow-x-hidden">
-      {/* Loading screen */}
       {loading && (
         <div className="flex-center absolute z-[100] h-dvh w-screen bg-violet-50">
           <div className="three-body">
             <div className="three-body__dot"></div>
             <div className="three-body__dot"></div>
-            <div class="three-body__dot"></div>
+            <div className="three-body__dot"></div>
           </div>
         </div>
       )}
 
-      {/* Main video container */}
       <div
         id="video-frame"
         className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-800 will-change-transform"
       >
-        {/* Fallback image */}
-        {(loading || videoError) && (
-          <img
-            src={getPosterSrc(currentIndex)}
-            alt="fallback background"
-            className="absolute left-0 top-0 size-full object-cover z-0"
-            decoding="async"
-            loading="lazy"
-          />
-        )}
-
         <div>
-          {/* Clickable video preview */}
           <div className="mask-clip-path absolute-center absolute z-50 size-56 cursor-pointer overflow-hidden rounded-lg will-change-transform">
             <VideoPreview>
               <div
@@ -176,55 +174,78 @@ const Hero = () => {
                 className="origin-center scale-50 opacity-0 transition-all duration-300 ease-in hover:scale-100 hover:opacity-100"
               >
                 <video
+                  ref={currentVdRef}
                   loop
                   muted
                   playsInline
-                  preload={isLowPerformance ? "metadata" : "auto"} // Changed for iOS
+                  preload={isLowPerformance ? "metadata" : "auto"}
                   id="current-video"
-                  className="size-64 origin-center scale-150 object-cover"
-                  onLoadedMetadata={handleVideoLoad}
-                  onError={handleVideoError}
-                  onCanPlay={(e) => e.target.play().catch(console.error)}
+                  className={`size-64 origin-center scale-150 object-cover will-change-opacity ${
+                    isVideoReady.current ? "opacity-100" : "opacity-0"
+                  }`}
+                  onCanPlay={(e) => {
+                    setIsVideoReady((prev) => ({ ...prev, current: true }));
+                    e.target.play().catch((err) => console.error("Current video play error:", err));
+                  }}
+                  onError={(e) => handleVideoError(e, "current")}
                   disablePictureInPicture
                   poster={getPosterSrc((currentIndex % totalVideos) + 1)}
                   src={getVideoSrc((currentIndex % totalVideos) + 1)}
-                >
-                
-                </video>
+                />
               </div>
             </VideoPreview>
           </div>
 
-          {/* Full-size video after clicking */}
+          <img
+            src={getPosterSrc(currentIndex)}
+            alt="next video fallback"
+            className={`absolute left-0 top-0 size-full object-cover z-5 transition-opacity duration-300 ${
+              isVideoReady.next && !loading && !videoError ? "opacity-0" : "opacity-100"
+            }`}
+            decoding="async"
+            loading="lazy"
+          />
+
           <video
             ref={nextVdRef}
             loop
             muted
             playsInline
-            preload={isLowPerformance ? "metadata" : "auto"} // Changed for iOS
+            preload={isLowPerformance ? "none" : "metadata"}
             id="next-video"
-            className="absolute-center invisible absolute z-20 size-64 object-cover will-change-transform"
-            onLoadedMetadata={handleVideoLoad}
-            onError={handleVideoError}
-            onCanPlay={(e) => e.target.play().catch(console.error)}
+            className={`absolute-center absolute z-20 size-64 object-cover will-change-transform,opacity ${
+              isVideoReady.next ? "visible opacity-100" : "invisible opacity-0"
+            }`}
+            onLoadedMetadata={(e) => handleVideoLoad(e, "next")}
+            onError={(e) => handleVideoError(e, "next")}
+            onCanPlayThrough={(e) => handleVideoLoad(e, "next")}
             disablePictureInPicture
             poster={getPosterSrc(currentIndex)}
             src={getVideoSrc(currentIndex)}
-          >
-            
-          </video>
+          />
 
-          {/* Background looping video */}
+          <img
+            src={getPosterSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
+            alt="background video fallback"
+            className={`absolute left-0 top-0 size-full object-cover z-5 transition-opacity duration-300 ${
+              isVideoReady.background && !loading && !videoError ? "opacity-0" : "opacity-100"
+            }`}
+            decoding="async"
+            loading="lazy"
+          />
+
           <video
             ref={backgroundVdRef}
-            loop // Removed autoPlay for iOS compatibility
+            loop
             muted
             playsInline
-            preload="auto" // Always preload for background video
-            className="absolute left-0 top-0 size-full object-cover will-change-transform"
-            onLoadedMetadata={handleVideoLoad}
-            onError={handleVideoError}
-            onCanPlay={(e) => e.target.play().catch(console.error)}
+            preload="auto"
+            className={`absolute left-0 top-0 size-full object-cover will-change-transform,opacity ${
+              isVideoReady.background ? "opacity-100" : "opacity-0"
+            }`}
+            onLoadedMetadata={(e) => handleVideoLoad(e, "background")}
+            onError={(e) => handleVideoError(e, "background")}
+            onCanPlayThrough={(e) => handleVideoLoad(e, "background")}
             disablePictureInPicture
             poster={getPosterSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
           >
@@ -235,7 +256,6 @@ const Hero = () => {
           </video>
         </div>
 
-        {/* Overlay heading and CTA button */}
         <div className="absolute left-0 top-0 z-40 size-full">
           <div className="mt-24 px-5 sm:px-10">
             <h1 className="special-font hero-heading text-blue-100 text-12xl sm:text-12xl md:text-12xl">
