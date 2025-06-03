@@ -220,7 +220,7 @@ const Hero = () => {
             onError={(e) => handleVideoError(e, "next")}
             onCanPlayThrough={(e) => handleVideoLoad(e, "next")}
             disablePictureInPicture
-            poster={getPosterSrc(currentIndex)}
+            // poster={getPosterSrc(currentIndex)}
             src={getVideoSrc(currentIndex)}
           />
 
