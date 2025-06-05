@@ -21,7 +21,7 @@ const Hero = () => {
 
   const nextVdRef = useRef(null);
   const backgroundVdRef = useRef(null);
-  const currentVdRef = useRef(null); // Added ref for current-video
+  const currentVdRef = useRef(null);
 
   const getVideoSrc = (index) => `videos/hero-${index}.mp4`;
   const getPosterSrc = (index) => `/img/hero-${index}.png`;
@@ -45,7 +45,7 @@ const Hero = () => {
         e.target.src = e.target.src;
         e.target.load();
       }
-    }, 1000); // Reduced to 1s for faster retry
+    }, 1000);
   };
 
   useEffect(() => {
@@ -61,7 +61,7 @@ const Hero = () => {
         setLoading(false);
         setVideoError(true);
       }
-    }, 6000); // Reduced to 6s for faster fallback
+    }, 6000);
 
     return () => clearTimeout(timeout);
   }, [loading]);
@@ -70,18 +70,18 @@ const Hero = () => {
     setHasClicked(true);
     setCurrentIndex((prev) => (prev % totalVideos) + 1);
 
-    // Ensure only one video plays at a time on iOS
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     if (isIOS) {
       if (backgroundVdRef.current) {
-        backgroundVdRef.current.pause(); // Pause background to prioritize next video
+        backgroundVdRef.current.pause();
+        backgroundVdRef.current.currentTime = 0; // Reset to start to ensure pause
       }
       if (currentVdRef.current) {
-        currentVdRef.current.pause(); // Pause current to reduce resource strain
+        currentVdRef.current.pause();
+        currentVdRef.current.currentTime = 0; // Reset to start
       }
     }
 
-    // Update next video source and play with slight delay
     if (nextVdRef.current) {
       const nextSrc = getVideoSrc(currentIndex);
       const sourceElement = nextVdRef.current.querySelector("source");
@@ -91,10 +91,9 @@ const Hero = () => {
       nextVdRef.current.load();
       setTimeout(() => {
         nextVdRef.current.play().catch((err) => console.error("Next video play error:", err));
-      }, 100); // Slight delay for iOS stability
+      }, 300); // Increased delay for iOS stability
     }
 
-    // Update background video source
     if (backgroundVdRef.current) {
       const bgSrc = getVideoSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex);
       const sourceElement = backgroundVdRef.current.querySelector("source");
@@ -103,12 +102,13 @@ const Hero = () => {
       }
       backgroundVdRef.current.load();
       setTimeout(() => {
-        backgroundVdRef.current.play().catch((err) => console.error("Background video play error:", err));
-      }, 200); // Slightly longer delay to avoid conflict
+        if (!isIOS) { // Only play background if not iOS
+          backgroundVdRef.current.play().catch((err) => console.error("Background video play error:", err));
+        }
+      }, 500); // Increased delay to avoid conflict
     }
   };
 
-  // Ensure background video updates on index change
   useEffect(() => {
     if (backgroundVdRef.current) {
       const bgSrc = getVideoSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex);
@@ -118,12 +118,13 @@ const Hero = () => {
       }
       backgroundVdRef.current.load();
       setTimeout(() => {
-        backgroundVdRef.current.play().catch((err) => console.error("Background video playback error:", err));
-      }, 100); // Slight delay for iOS
+        if (!(/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream)) { // Only play if not iOS
+          backgroundVdRef.current.play().catch((err) => console.error("Background video playback error:", err));
+        }
+      }, 100);
     }
   }, [currentIndex]);
 
-  // Animate video on index change
   useGSAP(
     () => {
       if (hasClicked && nextVdRef.current) {
@@ -151,7 +152,6 @@ const Hero = () => {
     { dependencies: [currentIndex, hasClicked], revertOnUpdate: true }
   );
 
-  // Scroll animation for video frame
   useGSAP(() => {
     gsap.set("#video-frame", {
       clipPath: "polygon(14% 0, 72% 0, 88% 90%, 0 95%)",
@@ -179,7 +179,7 @@ const Hero = () => {
           <div className="three-body">
             <div className="three-body__dot"></div>
             <div className="three-body__dot"></div>
-            <div class="three-body__dot"></div>
+            <div className="three-body__dot"></div>
           </div>
         </div>
       )}
@@ -206,7 +206,7 @@ const Hero = () => {
                 className="origin-center scale-50 opacity-0 transition-all duration-300 ease-in hover:scale-100 hover:opacity-100"
               >
                 <video
-                  ref={currentVdRef} // Added ref
+                  ref={currentVdRef}
                   loop
                   muted
                   playsInline
@@ -219,9 +219,7 @@ const Hero = () => {
                   disablePictureInPicture
                   poster={getPosterSrc((currentIndex % totalVideos) + 1)}
                   src={getVideoSrc((currentIndex % totalVideos) + 1)}
-                >
-                  
-                </video>
+                />
               </div>
             </VideoPreview>
           </div>
@@ -240,9 +238,7 @@ const Hero = () => {
             disablePictureInPicture
             poster={getPosterSrc(currentIndex)}
             src={getVideoSrc(currentIndex)}
-          >
-            
-          </video>
+          />
 
           <video
             ref={backgroundVdRef}
@@ -257,9 +253,7 @@ const Hero = () => {
             disablePictureInPicture
             poster={getPosterSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
             src={getVideoSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
-          >
-            
-          </video>
+          />
         </div>
 
         <div className="absolute left-0 top-0 z-40 size-full">
