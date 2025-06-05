@@ -239,8 +239,9 @@ const Hero = () => {
             onCanPlay={(e) => e.target.play().catch(console.error)}
             disablePictureInPicture
             poster={getPosterSrc(currentIndex)}
+            src={getVideoSrc(currentIndex)}
           >
-            <source src={getVideoSrc(currentIndex)} type="video/mp4" />
+            
           </video>
 
           <video
@@ -255,11 +256,9 @@ const Hero = () => {
             onCanPlay={(e) => e.target.play().catch(console.error)}
             disablePictureInPicture
             poster={getPosterSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
+            src={getVideoSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
           >
-            <source
-              src={getVideoSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
-              type="video/mp4"
-            />
+            
           </video>
         </div>
 
