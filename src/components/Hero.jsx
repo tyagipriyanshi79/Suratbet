@@ -21,10 +21,8 @@ const Hero = () => {
 
   const nextVdRef = useRef(null);
   const backgroundVdRef = useRef(null);
-  const currentVdRef = useRef(null);
 
-  const getVideoSrc = (index) => `videos/hero-${index}.mp4`;
-  const getPosterSrc = (index) => `/img/hero-${index}.png`;
+  const getVideoSrc = (index) => `/videos/hero-${index}.mp4`; // Ensure leading slash for public folder
 
   const handleVideoLoad = (e) => {
     console.log(`Video loaded: ${e.target.src}`);
@@ -40,28 +38,29 @@ const Hero = () => {
   const handleVideoError = (e) => {
     console.error(`Video failed to load: ${e.target.src}`);
     setVideoError(true);
+    // Limit retries to avoid infinite loops on iOS
     setTimeout(() => {
       if (e.target && !videoError) {
-        e.target.src = e.target.src;
         e.target.load();
       }
-    }, 1000);
+    }, 2000);
   };
 
   useEffect(() => {
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    // Detect low-performance devices
     const isOlderDevice = navigator.hardwareConcurrency
       ? navigator.hardwareConcurrency <= 2
       : false;
-    setIsLowPerformance(isOlderDevice || isIOS);
+    setIsLowPerformance(isOlderDevice);
 
+    // Fallback: hide loading screen after timeout
     const timeout = setTimeout(() => {
       if (loading) {
         console.warn("Video loading timed out, hiding loading screen");
         setLoading(false);
         setVideoError(true);
       }
-    }, 6000);
+    }, 8000); // Reduced to 8s for faster fallback on iOS
 
     return () => clearTimeout(timeout);
   }, [loading]);
@@ -69,62 +68,26 @@ const Hero = () => {
   const handleMiniVdClick = () => {
     setHasClicked(true);
     setCurrentIndex((prev) => (prev % totalVideos) + 1);
-
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    if (isIOS) {
-      if (backgroundVdRef.current) {
-        backgroundVdRef.current.pause();
-        backgroundVdRef.current.currentTime = 0; // Reset to start to ensure pause
-      }
-      if (currentVdRef.current) {
-        currentVdRef.current.pause();
-        currentVdRef.current.currentTime = 0; // Reset to start
-      }
-    }
-
+    // Reload videos for iOS compatibility
     if (nextVdRef.current) {
-      const nextSrc = getVideoSrc(currentIndex);
-      const sourceElement = nextVdRef.current.querySelector("source");
-      if (sourceElement) {
-        sourceElement.src = nextSrc;
-      }
       nextVdRef.current.load();
-      setTimeout(() => {
-        nextVdRef.current.play().catch((err) => console.error("Next video play error:", err));
-      }, 300); // Increased delay for iOS stability
+      nextVdRef.current.play().catch((err) => console.error("Next video play error:", err));
     }
-
     if (backgroundVdRef.current) {
-      const bgSrc = getVideoSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex);
-      const sourceElement = backgroundVdRef.current.querySelector("source");
-      if (sourceElement) {
-        sourceElement.src = bgSrc;
-      }
       backgroundVdRef.current.load();
-      setTimeout(() => {
-        if (!isIOS) { // Only play background if not iOS
-          backgroundVdRef.current.play().catch((err) => console.error("Background video play error:", err));
-        }
-      }, 500); // Increased delay to avoid conflict
+      backgroundVdRef.current.play().catch((err) => console.error("Background video play error:", err));
     }
   };
 
+  // Ensure background video updates on index change
   useEffect(() => {
     if (backgroundVdRef.current) {
-      const bgSrc = getVideoSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex);
-      const sourceElement = backgroundVdRef.current.querySelector("source");
-      if (sourceElement) {
-        sourceElement.src = bgSrc;
-      }
       backgroundVdRef.current.load();
-      setTimeout(() => {
-        if (!(/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream)) { // Only play if not iOS
-          backgroundVdRef.current.play().catch((err) => console.error("Background video playback error:", err));
-        }
-      }, 100);
+      backgroundVdRef.current.play().catch((err) => console.error("Background video playback error:", err));
     }
   }, [currentIndex]);
 
+  // Animate video on index change
   useGSAP(
     () => {
       if (hasClicked && nextVdRef.current) {
@@ -152,6 +115,7 @@ const Hero = () => {
     { dependencies: [currentIndex, hasClicked], revertOnUpdate: true }
   );
 
+  // Scroll animation for video frame
   useGSAP(() => {
     gsap.set("#video-frame", {
       clipPath: "polygon(14% 0, 72% 0, 88% 90%, 0 95%)",
@@ -174,23 +138,26 @@ const Hero = () => {
 
   return (
     <div id="hero" className="relative h-dvh w-screen overflow-x-hidden">
+      {/* Loading screen */}
       {loading && (
         <div className="flex-center absolute z-[100] h-dvh w-screen bg-violet-50">
           <div className="three-body">
             <div className="three-body__dot"></div>
             <div className="three-body__dot"></div>
-            <div className="three-body__dot"></div>
+            <div class="three-body__dot"></div>
           </div>
         </div>
       )}
 
+      {/* Main video container */}
       <div
         id="video-frame"
-        className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-black will-change-transform"
+        className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-800 will-change-transform"
       >
+        {/* Fallback image */}
         {(loading || videoError) && (
           <img
-            src={getPosterSrc(currentIndex)}
+            src="/img/contact-2.webp"
             alt="fallback background"
             className="absolute left-0 top-0 size-full object-cover z-0"
             decoding="async"
@@ -199,63 +166,75 @@ const Hero = () => {
         )}
 
         <div>
-          <div className="mask-clip-path absolute-center absolute z-50 size-56 cursor-pointer overflow-hidden rounded-lg will-change-transform">
+          {/* Clickable video preview */}
+          <div className="mask-clip-path absolute-center absolute z-50 size-32 cursor-pointer overflow-hidden rounded-lg will-change-transform">
             <VideoPreview>
               <div
                 onClick={handleMiniVdClick}
-                className="origin-center scale-50 opacity-0 transition-all duration-300 ease-in hover:scale-100 hover:opacity-100"
+                className="origin-center scale-25 opacity-0 transition-all duration-300 ease-in hover:scale-100 hover:opacity-100"
               >
                 <video
-                  ref={currentVdRef}
                   loop
                   muted
                   playsInline
-                  preload={isLowPerformance ? "metadata" : "auto"}
+                  preload={isLowPerformance ? "metadata" : "auto"} // Changed for iOS
                   id="current-video"
                   className="size-64 origin-center scale-150 object-cover"
                   onLoadedMetadata={handleVideoLoad}
                   onError={handleVideoError}
                   onCanPlay={(e) => e.target.play().catch(console.error)}
                   disablePictureInPicture
-                  poster={getPosterSrc((currentIndex % totalVideos) + 1)}
-                  src={getVideoSrc((currentIndex % totalVideos) + 1)}
-                />
+                  poster="/img/contact-2.webp"
+                >
+                  <source
+                    src={getVideoSrc((currentIndex % totalVideos) + 1)}
+                    type="video/mp4"
+                  />
+                </video>
               </div>
             </VideoPreview>
           </div>
 
+          {/* Full-size video after clicking */}
           <video
             ref={nextVdRef}
             loop
             muted
             playsInline
-            preload={isLowPerformance ? "metadata" : "auto"}
+            preload={isLowPerformance ? "metadata" : "auto"} // Changed for iOS
             id="next-video"
             className="absolute-center invisible absolute z-20 size-64 object-cover will-change-transform"
             onLoadedMetadata={handleVideoLoad}
             onError={handleVideoError}
             onCanPlay={(e) => e.target.play().catch(console.error)}
             disablePictureInPicture
-            poster={getPosterSrc(currentIndex)}
-            src={getVideoSrc(currentIndex)}
-          />
+            poster="/img/contact-2.webp"
+          >
+            <source src={getVideoSrc(currentIndex)} type="video/mp4" />
+          </video>
 
+          {/* Background looping video */}
           <video
             ref={backgroundVdRef}
-            loop
+            loop // Removed autoPlay for iOS compatibility
             muted
             playsInline
-            preload="auto"
+            preload="auto" // Always preload for background video
             className="absolute left-0 top-0 size-full object-cover will-change-transform"
             onLoadedMetadata={handleVideoLoad}
             onError={handleVideoError}
             onCanPlay={(e) => e.target.play().catch(console.error)}
             disablePictureInPicture
-            poster={getPosterSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
-            src={getVideoSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
-          />
+            poster="/img/contact-2.webp"
+          >
+            <source
+              src={getVideoSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
+              type="video/mp4"
+            />
+          </video>
         </div>
 
+        {/* Overlay heading and CTA button */}
         <div className="absolute left-0 top-0 z-40 size-full">
           <div className="mt-24 px-5 sm:px-10">
             <h1 className="special-font hero-heading text-blue-100 text-12xl sm:text-12xl md:text-12xl">
