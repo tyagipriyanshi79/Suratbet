@@ -21,10 +21,10 @@ const Hero = () => {
 
   const nextVdRef = useRef(null);
   const backgroundVdRef = useRef(null);
+  const currentVdRef = useRef(null); // Added ref for current-video
 
-  const getVideoSrc = (index) => `videos/hero-${index}.mp4`; // Ensure leading slash for public folder
+  const getVideoSrc = (index) => `videos/hero-${index}.mp4`;
   const getPosterSrc = (index) => `/img/hero-${index}.png`;
-
 
   const handleVideoLoad = (e) => {
     console.log(`Video loaded: ${e.target.src}`);
@@ -40,29 +40,28 @@ const Hero = () => {
   const handleVideoError = (e) => {
     console.error(`Video failed to load: ${e.target.src}`);
     setVideoError(true);
-    // Limit retries to avoid infinite loops on iOS
     setTimeout(() => {
       if (e.target && !videoError) {
+        e.target.src = e.target.src;
         e.target.load();
       }
-    }, 2000);
+    }, 1000); // Reduced to 1s for faster retry
   };
 
   useEffect(() => {
-    // Detect low-performance devices
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     const isOlderDevice = navigator.hardwareConcurrency
       ? navigator.hardwareConcurrency <= 2
       : false;
-    setIsLowPerformance(isOlderDevice);
+    setIsLowPerformance(isOlderDevice || isIOS);
 
-    // Fallback: hide loading screen after timeout
     const timeout = setTimeout(() => {
       if (loading) {
         console.warn("Video loading timed out, hiding loading screen");
         setLoading(false);
         setVideoError(true);
       }
-    }, 8000); // Reduced to 8s for faster fallback on iOS
+    }, 6000); // Reduced to 6s for faster fallback
 
     return () => clearTimeout(timeout);
   }, [loading]);
@@ -70,22 +69,57 @@ const Hero = () => {
   const handleMiniVdClick = () => {
     setHasClicked(true);
     setCurrentIndex((prev) => (prev % totalVideos) + 1);
-    // Reload videos for iOS compatibility
-    if (nextVdRef.current) {
-      nextVdRef.current.load();
-      nextVdRef.current.play().catch((err) => console.error("Next video play error:", err));
+
+    // Ensure only one video plays at a time on iOS
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (isIOS) {
+      if (backgroundVdRef.current) {
+        backgroundVdRef.current.pause(); // Pause background to prioritize next video
+      }
+      if (currentVdRef.current) {
+        currentVdRef.current.pause(); // Pause current to reduce resource strain
+      }
     }
+
+    // Update next video source and play with slight delay
+    if (nextVdRef.current) {
+      const nextSrc = getVideoSrc(currentIndex);
+      const sourceElement = nextVdRef.current.querySelector("source");
+      if (sourceElement) {
+        sourceElement.src = nextSrc;
+      }
+      nextVdRef.current.load();
+      setTimeout(() => {
+        nextVdRef.current.play().catch((err) => console.error("Next video play error:", err));
+      }, 100); // Slight delay for iOS stability
+    }
+
+    // Update background video source
     if (backgroundVdRef.current) {
+      const bgSrc = getVideoSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex);
+      const sourceElement = backgroundVdRef.current.querySelector("source");
+      if (sourceElement) {
+        sourceElement.src = bgSrc;
+      }
       backgroundVdRef.current.load();
-      backgroundVdRef.current.play().catch((err) => console.error("Background video play error:", err));
+      setTimeout(() => {
+        backgroundVdRef.current.play().catch((err) => console.error("Background video play error:", err));
+      }, 200); // Slightly longer delay to avoid conflict
     }
   };
 
   // Ensure background video updates on index change
   useEffect(() => {
     if (backgroundVdRef.current) {
+      const bgSrc = getVideoSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex);
+      const sourceElement = backgroundVdRef.current.querySelector("source");
+      if (sourceElement) {
+        sourceElement.src = bgSrc;
+      }
       backgroundVdRef.current.load();
-      backgroundVdRef.current.play().catch((err) => console.error("Background video playback error:", err));
+      setTimeout(() => {
+        backgroundVdRef.current.play().catch((err) => console.error("Background video playback error:", err));
+      }, 100); // Slight delay for iOS
     }
   }, [currentIndex]);
 
@@ -140,7 +174,6 @@ const Hero = () => {
 
   return (
     <div id="hero" className="relative h-dvh w-screen overflow-x-hidden">
-      {/* Loading screen */}
       {loading && (
         <div className="flex-center absolute z-[100] h-dvh w-screen bg-violet-50">
           <div className="three-body">
@@ -151,12 +184,10 @@ const Hero = () => {
         </div>
       )}
 
-      {/* Main video container */}
       <div
         id="video-frame"
         className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-black will-change-transform"
       >
-        {/* Fallback image */}
         {(loading || videoError) && (
           <img
             src={getPosterSrc(currentIndex)}
@@ -168,7 +199,6 @@ const Hero = () => {
         )}
 
         <div>
-          {/* Clickable video preview */}
           <div className="mask-clip-path absolute-center absolute z-50 size-56 cursor-pointer overflow-hidden rounded-lg will-change-transform">
             <VideoPreview>
               <div
@@ -176,10 +206,11 @@ const Hero = () => {
                 className="origin-center scale-50 opacity-0 transition-all duration-300 ease-in hover:scale-100 hover:opacity-100"
               >
                 <video
+                  ref={currentVdRef} // Added ref
                   loop
                   muted
                   playsInline
-                  preload={isLowPerformance ? "metadata" : "auto"} // Changed for iOS
+                  preload={isLowPerformance ? "metadata" : "auto"}
                   id="current-video"
                   className="size-64 origin-center scale-150 object-cover"
                   onLoadedMetadata={handleVideoLoad}
@@ -189,19 +220,18 @@ const Hero = () => {
                   poster={getPosterSrc((currentIndex % totalVideos) + 1)}
                   src={getVideoSrc((currentIndex % totalVideos) + 1)}
                 >
-                
+                  
                 </video>
               </div>
             </VideoPreview>
           </div>
 
-          {/* Full-size video after clicking */}
           <video
             ref={nextVdRef}
             loop
             muted
             playsInline
-            preload={isLowPerformance ? "metadata" : "auto"} // Changed for iOS
+            preload={isLowPerformance ? "metadata" : "auto"}
             id="next-video"
             className="absolute-center invisible absolute z-20 size-64 object-cover will-change-transform"
             onLoadedMetadata={handleVideoLoad}
@@ -214,28 +244,24 @@ const Hero = () => {
             
           </video>
 
-          {/* Background looping video */}
           <video
             ref={backgroundVdRef}
-            loop // Removed autoPlay for iOS compatibility
+            loop
             muted
             playsInline
-            preload="auto" // Always preload for background video
+            preload="auto"
             className="absolute left-0 top-0 size-full object-cover will-change-transform"
             onLoadedMetadata={handleVideoLoad}
             onError={handleVideoError}
             onCanPlay={(e) => e.target.play().catch(console.error)}
             disablePictureInPicture
             poster={getPosterSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
+            src={getVideoSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
           >
-            <source
-              src={getVideoSrc(currentIndex === totalVideos - 1 ? 1 : currentIndex)}
-              type="video/mp4"
-            />
+            
           </video>
         </div>
 
-        {/* Overlay heading and CTA button */}
         <div className="absolute left-0 top-0 z-40 size-full">
           <div className="mt-24 px-5 sm:px-10">
             <h1 className="special-font hero-heading text-blue-100 text-12xl sm:text-12xl md:text-12xl">
@@ -263,4 +289,4 @@ const Hero = () => {
   );
 };
 
-export default Hero;
+export default Hero; 
